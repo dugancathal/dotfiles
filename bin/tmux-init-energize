@@ -1,0 +1,50 @@
+#!/bin/bash
+
+SESSION="energize"
+
+# Start the new session
+tmux -2 new-session -d -s "$SESSION"
+
+# Background processes
+#
+# |------------------|
+# |        |    2    |
+# |   1    |---------|
+# |        |    3    |
+# |------------------|
+
+tmux rename-window -t "$SESSION:1" "Foreman/Zeus"
+tmux split-window -h
+
+tmux select-pane -t 0
+tmux send-keys "cde; foreman start" C-m
+
+tmux select-pane -t 1
+tmux send-keys "cde; zeus start" C-m
+
+tmux split-window -v
+tmux select-pane -t 2
+tmux send-keys "cde; rails s -p3015" C-m
+
+# Working window
+
+tmux new-window -t "$SESSION:2"
+tmux rename-window -t "$SESSION:2" "Working"
+tmux select-window -t "$SESSION:2"
+tmux split-window -v
+
+tmux select-pane -t 0
+tmux split-window -h
+
+tmux select-pane -t 1
+tmux resize-pane -D 9
+
+# SSH Window
+
+tmux new-window -t "$SESSION:3"
+tmux rename-window -t "$SESSION:3" "SSHes"
+tmux select-window -t "$SESSION:2"
+
+# Attach
+
+tmux -2 attach-session -t "$SESSION"

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -f $HOME/.tendril ]; then
+  echo "Loading Tendril Config"
+  source .tendril
+fi
+
+if [ -S .zeus.sock ]; then
+  zeus rspec "$@"
+else
+  command rspec "$@"
+fi
