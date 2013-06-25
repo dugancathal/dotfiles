@@ -5,7 +5,7 @@ ZSH=$HOME/.dotfiles/oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="steeef"
 
 # Never know when you're gonna need to popd!
 setopt AUTO_PUSHD
@@ -38,17 +38,20 @@ SAVEHIST=20000
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 # COMPLETION_WAITING_DOTS="true"
 
+# Update OH MY ZSH every X days
+export UPDATE_ZSH_DAYS=7
+
 # Disable flow control commands (keeps C-s from freezing everything)
 stty start undef
 stty stop undef
 
-# RVM 
-[[ -s "/Users/ben/.rvm/scripts/rvm" ]] && source "/Users/ben/.rvm/scripts/rvm"
+# rbenv 
+eval "$(rbenv init -)"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git rvm)
+plugins=(git rvm ruby bundler)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -56,11 +59,27 @@ source $ZSH/oh-my-zsh.sh
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
 
-# Customize to your needs...
-export PATH=bin:/Users/ben/.rvm/gems/ruby-1.9.2-p180/bin:/Users/ben/.rvm/gems/ruby-1.9.2-p180@global/bin:/Users/ben/.rvm/rubies/ruby-1.9.2-p180/bin:/Users/ben/.rvm/bin:~/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin
 
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-PATH=$PATH:/usr/texbin
+# Completions
+autoload -U compinit
+compinit
+
+# Enter directories without cd
+setopt auto_cd
+
+export EDITOR=vim
+
+# Expand functions in prompt
+setopt prompt_subst
+
+# Ignore duplicates in history
+setopt histignoredups
+
+# Enable extended globbing
+setopt EXTENDED_GLOB
+
+# Customize to your needs...
+export PATH=$HOME/.functions:/usr/local/bin:$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:$HOME/.bin
 
 # Shaves about 0.5s off Rails boot time (when using perf patch). Taken from https://gist.github.com/1688857
 export RUBY_HEAP_MIN_SLOTS=1000000
@@ -68,3 +87,4 @@ export RUBY_HEAP_SLOTS_INCREMENT=1000000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 export RUBY_GC_MALLOC_LIMIT=1000000000
 export RUBY_HEAP_FREE_MIN=500000
+

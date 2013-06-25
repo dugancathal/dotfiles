@@ -1,35 +1,30 @@
 [user]
-	name = Ben Orenstein
-	email = ben.orenstein@gmail.com 
-[alias]
-	co = checkout
-        cleanup = !git remote prune origin && git gc && git clean -df && git stash clear
-[color]
-	diff = auto
-	status = auto
-	branch = auto
-
-[color "diff"]
-        meta = yellow 
-
-[core]
-	excludesfile = ~/.gitignore
-	editor = vim --noplugin
-[apply]
-	whitespace = nowarn
-
-[alias]
-      lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-[help]
-	autocorrect = 1
-[branch]
-	autosetupmerge = true
-        autosetuprebase = always
 [push]
 	default = current
-[rerere]
-	enabled = 1
-[github]
-	user = r00k
-[merge]
-        ff = only
+[core]
+	excludesfile = /Users/ttaylor/.gitignore
+
+# DO NOT EDIT BELOW THIS LINE
+
+[push]
+  default = tracking
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+[format]
+  pretty = %Cblue%h%Creset %Cgreen[%ar]%Creset (%an) %s
+[alias]
+  aa = add --all
+  am = commit --amend
+  ap = add --patch
+  ci = commit -v
+  co = checkout
+  create-branch = !sh -c 'git push origin HEAD:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
+  delete-branch = !sh -c 'git push origin :refs/heads/$1 && git remote prune origin && git branch -D $1' -
+  merge-branch = !git checkout master && git merge @{-1} --ff-only
+  rebase-origin = !git fetch origin && git rebase origin/master
+  st = status
+[core]
+  excludesfile = ~/.gitignore
+  autocrlf = input

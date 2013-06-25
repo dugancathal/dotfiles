@@ -1,7 +1,0 @@
-log
-vendor
-tmp
-doc
-coverage
-public/assets
-*.sql

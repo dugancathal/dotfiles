@@ -1,3 +1,6 @@
+# Tendril Specific
+alias cde="cd $HOME/Documents/rubydev/energize"
+
 # Handle the fact that this file will be used with multiple OSs
 platform=`uname`
 if [[ $platform == 'Linux' ]]; then
@@ -28,9 +31,11 @@ alias dr='cd ~/Dropbox'
 alias drop='cd ~/Dropbox'
 alias fs='foreman start'
 alias -g G='| grep'
+alias g="git"
 alias gad='git add .'
 alias gadu='git add -u .'
 alias gbc='gdc'
+alias gc="git commit"
 alias gca='git commit -a'
 alias gcaa='git commit -a --amend -C HEAD'
 alias gcl='git clone'
@@ -47,6 +52,7 @@ alias gpf='git push -f'
 alias gpr='git pull --rebase'
 alias grc='git rebase --continue'
 alias grake='rspec --drb spec/ && cucumber --drb features/'
+alias gs="git status"
 alias gurad='guard'
 alias h='sync'
 alias he='cd ~/code/hacker-engine'
