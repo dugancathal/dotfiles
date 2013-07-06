@@ -3,10 +3,11 @@ filetype plugin on
 let mapleader = ","
 
 set hlsearch
-set ignorecase
 set incsearch
-set number
+set smartcase
+nnoremap <Leader>h :nohlsearch<cr>
 
+set number
 set noswapfile
 set ruler
 set expandtab
@@ -19,32 +20,11 @@ highlight Pmenu ctermfg=black ctermbg=gray
 
 execute pathogen#infect()
 
-"comment (cc) and uncomment (cu) Ruby code 
-noremap   <silent> cc      :s,^\(\s*\)[^# \t]\@=,\1# ,e<CR>:nohls<CR>zvj
-noremap   <silent> cu      :s,^\(\s*\)# \s\@!,\1,e<CR>:nohls<CR>zvj
-
 :command! -nargs=* -complete=shellcmd RIW bot new | setlocal buftype=nofile bufhidden=hide noswapfile | silent r !<args>
-au BufRead,BufNewFile *.md setlocal spell
-au BufRead,BufNewFile *.md setlocal textwidth=80
+au BufRead,BufNewFile *.md,*.markdown setlocal spell
+au BufRead,BufNewFile *.md,*.markdown setlocal textwidth=80
 
 hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=Red
-
-map <Leader>e :Explore<CR>
-map <Leader>t :call RunCurrentTestFile()<CR>
-map <Leader>q :q<CR>
-
-" Remove White Space from ends of lines
-map <Leader>rws :%s/\s\+$//g<CR>
-
-map <Leader>n :tabn<CR>
-map <Leader>b :tabp<CR>
-
-" Open up a vsplit of ~/.vimrc and then source it
-nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <Leader>sv :source $MYVIMRC<cr>
-
-" Exit with jk
-inoremap jk <esc>
 
 function! RunCurrentTestFile()
   if InTestFile()
@@ -86,3 +66,43 @@ inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 " Switch between last two files
 nnoremap <leader><leader> <c-^>
+
+" Open paste mode, paste in current line at proper level of indent, and close
+" paste mode
+map <Leader>p :set paste<CR>o<esc>:r !pbpaste<CR>:set nopaste<CR>
+
+"comment (cc) and uncomment (cu) Ruby code 
+noremap   <silent> cc      :s,^\(\s*\)[^# \t]\@=,\1# ,e<CR>:nohls<CR>zvj
+noremap   <silent> cu      :s,^\(\s*\)# \s\@!,\1,e<CR>:nohls<CR>zvj
+
+map <Leader>e :Explore<CR>
+map <Leader>q :q<CR>
+map <Leader>t :call RunCurrentTestFile()<CR>
+map <Leader>sn :set number<CR>
+map <Leader>nn :set nonumber<CR>
+map <Leader>srn :set relativenumber<CR>
+map <Leader>nrn :set relativenumber<CR>
+
+" Remove White Space from ends of lines
+map <Leader>rws :%s/\s\+$//g<CR>
+
+map <Leader>n :tabn<CR>
+map <Leader>b :tabp<CR>
+
+" Open up a vsplit of ~/.vimrc and then source it
+nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <Leader>sv :source $MYVIMRC<cr>
+
+" Exit with jk
+inoremap jk <esc>
+vnoremap jk <esc>
+
+" Don't wait so long for the next keypress (particularly in ambigious Leader
+" situations.
+set timeoutlen=300
+
+" Window split settings from Pat Brisdin ( @thoughtbot )
+set winwidth=84
+set winheight=5
+set winminheight=5
+set winheight=999

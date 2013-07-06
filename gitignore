@@ -1,3 +1,10 @@
-vim/.netrwhist
-vim/bundle
-vim/doc/tags-ja
+.DS_Store
+.svn
+*~
+tags
+log/
+db/*.sqlite3
+.netrwhist
+project-notes.txt
+
+.ruby-version

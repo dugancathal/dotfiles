@@ -2,7 +2,7 @@
 
 if [ -f $HOME/.tendril ]; then
   echo "Loading Tendril Config"
-  source .tendril
+  source $HOME/.tendril
 fi
 
 if [ -S .zeus.sock ]; then
