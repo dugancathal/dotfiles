@@ -5,8 +5,17 @@ if [ -f $HOME/.tendril ]; then
   source $HOME/.tendril
 fi
 
-if [ -S .zeus.sock ]; then
-  zeus rspec "$@"
+if [ -f spec/spec_helper.rb ] && grep -q minitest spec/spec_helper.rb; then
+  RUBY_TEST_COMMAND="rake TEST=$1"
 else
-  command rspec "$@"
+  RUBY_TEST_COMMAND=rspec
+fi
+
+echo "Using $RUBY_TEST_COMMAND"
+
+if [ -S .zeus.sock ]; then
+  zeus $RUBY_TEST_COMMAND "$@"
+else
+  bundle exec $RUBY_TEST_COMMAND 
+  echo "COMMAND $RUBY_TEST_COMMAND $@"
 fi

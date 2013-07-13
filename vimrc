@@ -21,8 +21,9 @@ highlight Pmenu ctermfg=black ctermbg=gray
 execute pathogen#infect()
 
 :command! -nargs=* -complete=shellcmd RIW bot new | setlocal buftype=nofile bufhidden=hide noswapfile | silent r !<args>
-au BufRead,BufNewFile *.md,*.markdown setlocal spell
-au BufRead,BufNewFile *.md,*.markdown setlocal textwidth=80
+
+autocmd BufRead,BufNewFile *.md,*.markdown setlocal spell
+autocmd BufRead,BufNewFile *.md,*.markdown setlocal textwidth=80
 
 hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=Red
 
@@ -47,22 +48,6 @@ endfunction
 function! RunTests(command)
   execute ":RIW echo " . a:command . " && echo && " . a:command
 endfunction
-
-
-" Tab completion
-" will insert tab at beginning of line,
-" will use completion if not at beginning
-set wildmode=list:longest,list:full
-set complete=.,w,t
-function! InsertTabWrapper()
-    let col = col('.') - 1
-    if !col || getline('.')[col - 1] !~ '\k'
-        return "\<tab>"
-    else
-        return "\<c-p>"
-    endif
-endfunction
-inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
 " Switch between last two files
 nnoremap <leader><leader> <c-^>
@@ -97,6 +82,9 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 inoremap jk <esc>
 vnoremap jk <esc>
 
+" Ruby - Convert String To Symbol
+nnoremap <Leader>cs m`bhr:wwx``
+
 " Don't wait so long for the next keypress (particularly in ambigious Leader
 " situations.
 set timeoutlen=300
@@ -106,3 +94,9 @@ set winwidth=84
 set winheight=5
 set winminheight=5
 set winheight=999
+
+augroup secretarygroup
+  autocmd!
+  autocmd BufRead,BufNewFile ~/.secretary* set filetype=secretary
+  autocmd BufWritePost ~/.secretary-* execute '! timesheet --parse'
+augroup END
