@@ -79,7 +79,7 @@ setopt histignoredups
 setopt EXTENDED_GLOB
 
 # Customize to your needs...
-export PATH=$HOME/.functions:/usr/local/bin:$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:$HOME/.bin
+export PATH=$HOME/.functions:/usr/local/bin:$PATH:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:$HOME/.bin:/usr/local/share/npm/bin
 
 # Shaves about 0.5s off Rails boot time (when using perf patch). Taken from https://gist.github.com/1688857
 export RUBY_HEAP_MIN_SLOTS=1000000

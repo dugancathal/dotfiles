@@ -1,5 +1,4 @@
-syntax on
-filetype plugin on
+syntax on filetype plugin on
 let mapleader = ","
 
 set hlsearch
@@ -17,6 +16,7 @@ set autoindent
 set pastetoggle=<Leader>pa
 
 highlight Pmenu ctermfg=black ctermbg=gray
+highlight StatusLine ctermfg=blue ctermbg=yellow
 
 execute pathogen#infect()
 
@@ -56,7 +56,7 @@ nnoremap <leader><leader> <c-^>
 " paste mode
 map <Leader>p :set paste<CR>o<esc>:r !pbpaste<CR>:set nopaste<CR>
 
-"comment (cc) and uncomment (cu) Ruby code 
+"comment (cc) and uncomment (cu) Ruby code
 noremap   <silent> cc      :s,^\(\s*\)[^# \t]\@=,\1# ,e<CR>:nohls<CR>zvj
 noremap   <silent> cu      :s,^\(\s*\)# \s\@!,\1,e<CR>:nohls<CR>zvj
 
@@ -100,3 +100,10 @@ augroup secretarygroup
   autocmd BufRead,BufNewFile ~/.secretary* set filetype=secretary
   autocmd BufWritePost ~/.secretary-* execute '! timesheet --parse'
 augroup END
+
+" Set statusline
+set laststatus=2
+set statusline=%F%m%r%h%w\
+set statusline+=%{fugitive#statusline()}\
+set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
+set statusline+=\ [line\ %l\/%L]

@@ -17,5 +17,4 @@ if [ -S .zeus.sock ]; then
   zeus $RUBY_TEST_COMMAND "$@"
 else
   bundle exec $RUBY_TEST_COMMAND 
-  echo "COMMAND $RUBY_TEST_COMMAND $@"
 fi
