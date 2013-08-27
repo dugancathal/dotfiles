@@ -45,3 +45,9 @@ function take {
 function gc {
   git commit -m "$*"
 }
+
+function serve {
+  dir="${1-.}"
+  port="${2-7654}"
+  ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => $port, :DocumentRoot => '$dir'); trap('INT') { s.shutdown }; s.start"
+}
