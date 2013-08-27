@@ -5,7 +5,7 @@ if [ -f $HOME/.tendril ]; then
   source $HOME/.tendril
 fi
 
-if [ -f spec/spec_helper.rb ] && grep -q minitest spec/spec_helper.rb; then
+if [ -f test/test_helper.rb ] || ([ -f spec/spec_helper.rb ] && grep -q minitest spec/spec_helper.rb); then
   RUBY_TEST_COMMAND="rake TEST=$1"
 else
   RUBY_TEST_COMMAND=rspec
