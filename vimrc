@@ -1,4 +1,5 @@
-syntax on filetype plugin on
+syntax on
+filetype plugin on
 let mapleader = ","
 
 set hlsearch
@@ -30,7 +31,17 @@ hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=Red
 function! RunCurrentTestFile()
   if InTestFile()
     execute ":w"
-    let  l:command = "~/.functions/rspec " . @%
+
+    if glob('test/test_helper.rb') > "\n"
+      let l:command = 'rake TEST=' . @%
+    elseif glob('spec/spec_helper.rb') > "\n"
+      let  l:command = "rspec " . @%
+    end
+
+    if glob('.zeus.sock') > "\n"
+      let l:command = "zeus " . l:command
+    endif
+
     call SetLastTestCommand(l:command)
     call RunTests(l:command)
     execute ":0"
@@ -67,6 +78,8 @@ map <Leader>sn :set number<CR>
 map <Leader>nn :set nonumber<CR>
 map <Leader>srn :set relativenumber<CR>
 map <Leader>nrn :set relativenumber<CR>
+map <Leader>so :w<CR>:so %<CR>
+map <Leader>x :exec getline(".")<CR>
 
 " Remove White Space from ends of lines
 map <Leader>rws :%s/\s\+$//g<CR>
@@ -91,9 +104,9 @@ set timeoutlen=300
 
 " Window split settings from Pat Brisdin ( @thoughtbot )
 set winwidth=84
-set winheight=5
-set winminheight=5
-set winheight=999
+set winheight=15
+set winminheight=15
+set winheight=50
 
 augroup secretarygroup
   autocmd!
@@ -103,7 +116,12 @@ augroup END
 
 " Set statusline
 set laststatus=2
-set statusline=%F%m%r%h%w\
-set statusline+=%{fugitive#statusline()}\
+set statusline=%F%m%r%h%w
+set statusline+=\ %{fugitive#statusline()}
 set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
 set statusline+=\ [line\ %l\/%L]
+set statusline+=\ [col\ %c]
+
+" More natural splits
+set splitbelow
+set splitright
