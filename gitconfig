@@ -28,6 +28,9 @@
   psuh = push
   rebase-origin = !git fetch origin && git rebase origin/master
   st = status
+	ctags = !.git/hooks/ctags
 [core]
   excludesfile = ~/.gitignore
-  autocrlf = input
+	autocrlf = false
+[init]
+	templatedir = ~/.git_template
