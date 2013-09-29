@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+  LOCATION="noc"
+else
+  LOCATION=$1
+fi
+
+shift
+
+. "connect-to-${LOCATION}" "$@"

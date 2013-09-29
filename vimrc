@@ -1,10 +1,11 @@
 syntax on
-filetype plugin on
+filetype indent plugin on
 let mapleader = ","
 
 set hlsearch
 set incsearch
 set smartcase
+set nocompatible
 nnoremap <Leader>h :nohlsearch<cr>
 
 set number
@@ -20,11 +21,13 @@ highlight Pmenu ctermfg=black ctermbg=gray
 highlight StatusLine ctermfg=blue ctermbg=yellow
 
 execute pathogen#infect()
+runtime macros/matchit.vim
 
 :command! -nargs=* -complete=shellcmd RIW bot new | setlocal buftype=nofile bufhidden=hide noswapfile | silent r !<args>
 
 autocmd BufRead,BufNewFile *.md,*.markdown setlocal spell
 autocmd BufRead,BufNewFile *.md,*.markdown setlocal textwidth=80
+autocmd BufRead,BufNewFile *.go set filetype=go
 
 hi SpellBad term=reverse cterm=underline ctermbg=1 gui=undercurl guisp=Red
 
@@ -36,6 +39,8 @@ function! RunCurrentTestFile()
       let l:command = 'rake TEST=' . @%
     elseif glob('spec/spec_helper.rb') > "\n"
       let  l:command = "rspec " . @%
+    else
+      let l:command = "ruby " . @%
     end
 
     if glob('.zeus.sock') > "\n"
@@ -95,8 +100,14 @@ nnoremap <Leader>sv :source $MYVIMRC<cr>
 inoremap jk <esc>
 vnoremap jk <esc>
 
+" Turn some lines into a single line, separated by spaces
+vmap <Leader>ac :s/$/,/<cr>
+vmap <Leader>aoc :Tabularize / :/l0r0l0<cr>
+vmap <Leader>sl :s/\s*\n/ /g<cr>$
+
 " Ruby - Convert String To Symbol
 nnoremap <Leader>cs m`bhr:wwx``
+nnoremap <Leader>sc m`bhr"wea"<ESC>``
 
 " Don't wait so long for the next keypress (particularly in ambigious Leader
 " situations.
