@@ -8,3 +8,8 @@ db/*.sqlite3
 project-notes.txt
 
 .ruby-version
+.notes
+custom_plan.rb
+zeus.json
+
+.idea/

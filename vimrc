@@ -101,7 +101,8 @@ inoremap jk <esc>
 vnoremap jk <esc>
 
 " Turn some lines into a single line, separated by spaces
-vmap <Leader>ac :s/$/,/<cr>
+vmap <Leader>toc :s/,.*//g<cr>
+vmap <Leader>ac :s/,\?$/,/<cr>
 vmap <Leader>aoc :Tabularize / :/l0r0l0<cr>
 vmap <Leader>sl :s/\s*\n/ /g<cr>$
 
@@ -123,6 +124,18 @@ augroup secretarygroup
   autocmd!
   autocmd BufRead,BufNewFile ~/.secretary* set filetype=secretary
   autocmd BufWritePost ~/.secretary-* execute '! timesheet --parse'
+augroup END
+
+augroup rubypath
+  autocmd!
+  autocmd FileType ruby setlocal suffixesadd+=.rb
+augroup END
+
+augroup golang
+  autocmd!
+  autocmd FileType go setlocal tabstop=4
+  autocmd FileType go setlocal shiftwidth=4
+  autocmd FileType go setlocal noexpandtab
 augroup END
 
 " Set statusline
