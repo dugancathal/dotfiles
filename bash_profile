@@ -10,6 +10,7 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Enable rbenv
+export PATH=$HOME/.rbenv/bin:$PATH
 eval "$(rbenv init -)"
 
 # Customize PATH

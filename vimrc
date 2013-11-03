@@ -116,8 +116,8 @@ set timeoutlen=300
 
 " Window split settings from Pat Brisdin ( @thoughtbot )
 set winwidth=84
-set winheight=15
-set winminheight=15
+set winheight=10
+set winminheight=10
 set winheight=50
 
 augroup secretarygroup
