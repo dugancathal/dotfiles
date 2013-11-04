@@ -1,0 +1,14 @@
+garbas/vim-snipmate
+groenewege/vim-less
+honza/vim-snippets
+jnwhiteh/vim-golang
+kana/vim-textobj-user
+kchmck/vim-coffee-script
+nelstrom/vim-textobj-rubyblock
+tomtom/tlib_vim
+tpope/vim-bundler
+tpope/vim-endwise
+tpope/vim-fugitive
+tpope/vim-rails
+tpope/vim-surround
+vim-ruby/vim-ruby

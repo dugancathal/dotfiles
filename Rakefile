@@ -4,7 +4,7 @@ desc "install the dot files into user's home directory"
 task :install do
   replace_all = false
   Dir['*'].each do |file|
-    next if %w[Rakefile README LICENSE id_dsa.pub].include? file
+    next if %w[Rakefile README LICENSE vim-plugins id_dsa.pub].include? file
     
     if File.exist?(File.join(ENV['HOME'], ".#{file}"))
       if ask "overwrite ~/.#{file}?"
@@ -28,7 +28,7 @@ task :vim_packages do
     curl -Sso ~/.vim/autoload/pathogen.vim \
         https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
   PATHOGEN
-  %w(tpope/vim-surround tpope/vim-rails tpope/vim-fugitive tpope/vim-endwise).each do |repo|
+  File.read('vim-plugins').split("\n").each do |repo|
     name = repo.split('/').last
     if ask "Install #{repo}?"
       system %Q{git clone git://github.com/#{repo}.git ~/.vim/bundle/#{name}}
