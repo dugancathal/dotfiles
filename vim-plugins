@@ -12,3 +12,4 @@ tpope/vim-fugitive
 tpope/vim-rails
 tpope/vim-surround
 vim-ruby/vim-ruby
+AndrewRadev/splitjoin
