@@ -25,8 +25,8 @@ task :vim_packages do
   puts "Installing pathogen"
   system <<-PATHOGEN
     mkdir -p ~/.vim/autoload ~/.vim/bundle; \
-    curl -Sso ~/.vim/autoload/pathogen.vim \
-        https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim
+    curl -LSso ~/.vim/autoload/pathogen.vim \
+        https://tpo.pe/pathogen.vim
   PATHOGEN
   File.read('vim-plugins').split("\n").each do |repo|
     name = repo.split('/').last
