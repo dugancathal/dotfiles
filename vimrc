@@ -138,14 +138,6 @@ augroup golang
   autocmd FileType go setlocal noexpandtab
 augroup END
 
-" Set statusline
-set laststatus=2
-set statusline=%F%m%r%h%w
-set statusline+=\ %{fugitive#statusline()}
-set statusline+=[%{strlen(&fenc)?&fenc:&enc}]
-set statusline+=\ [line\ %l\/%L]
-set statusline+=\ [col\ %c]
-
 " More natural splits
 set splitbelow
 set splitright
