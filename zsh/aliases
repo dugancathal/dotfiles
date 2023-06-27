@@ -1,2 +1,5 @@
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -selection clipboard -o'
+
+alias be='bundle exec'
+alias ber='bundle exec rake'
