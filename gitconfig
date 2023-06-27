@@ -1,0 +1,64 @@
+[user]
+	name = TJ Taylor
+	email = tj@mobilize.io
+	signingkey = 35DA3202
+[push]
+	default = current
+[core]
+	excludesfile = /Users/ttaylor/.gitignore
+
+# DO NOT EDIT BELOW THIS LINE
+
+[push]
+  default = tracking
+[color]
+  branch = auto
+  diff = auto
+  status = auto
+[format]
+  pretty = %Cblue%h%Creset %Cgreen[%ar]%Creset (%an) %s
+[alias]
+  aa = add --all
+  am = commit --amend
+  ap = add --patch
+  ci = commit -v
+  cane = commit --no-e --am
+  co = checkout
+  br = branch
+  recon = rebase --continue
+  pbr = push -u origin head
+  pbrfl = push -u origin head --force-with-lease
+  create-branch = !sh -c 'git push origin HEAD:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
+  delete-branch = !sh -c 'git push origin :refs/heads/$1 && git remote prune origin && git branch -D $1' -
+  merge-branch = !git checkout master && git merge @{-1} --ff-only
+  psuh = push
+  rebase-origin = !git fetch origin && git rebase origin/master
+  stale-locals = !git for-each-ref --format '%(refname:short) %(upstream:track)'  | grep '\\[gone\\]' | awk '{print $1}'
+  fod = fetch origin dev
+  cofd = "!f() { git fod && git co -b $1 origin/dev; }; f"
+  frod = !git fod && git rebase --autosquash -i origin/dev
+  st = status
+  ctags = !.git/hooks/ctags
+  llog = log --date=local
+  flog = log --pretty=fuller --decorate
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  lol = log --graph --decorate --oneline
+  lola = log --graph --decorate --oneline --all
+  copy-pr-url = !gh pr view --json url | jq -r .url | pbcopy
+  merge-prod = "!${HOME}/.bin/merge-prod.sh"
+  wip = "!f() { git add . && git commit -m \"WIP: $@\" -n; }; f"
+  unwip = !git --no-pager log --pretty=oneline -n 1 && git reset head~
+[core]
+  excludesfile = ~/.gitignore
+	autocrlf = false
+[init]
+	defaultBranch = main
+[diff]
+	tool = opendiff
+[merge]
+	tool = opendiff
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
