@@ -26,31 +26,34 @@
   co = checkout
   br = branch
   recon = rebase --continue
-  pbr = push -u origin head
-  pbrfl = push -u origin head --force-with-lease
+  pbr = push -u origin HEAD
+  pbrfl = push -u origin HEAD --force-with-lease
   create-branch = !sh -c 'git push origin HEAD:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
   delete-branch = !sh -c 'git push origin :refs/heads/$1 && git remote prune origin && git branch -D $1' -
   merge-branch = !git checkout master && git merge @{-1} --ff-only
   psuh = push
   rebase-origin = !git fetch origin && git rebase origin/master
   stale-locals = !git for-each-ref --format '%(refname:short) %(upstream:track)'  | grep '\\[gone\\]' | awk '{print $1}'
-  fod = fetch origin dev
-  cofd = "!f() { git fod && git co -b $1 origin/dev; }; f"
-  frod = !git fod && git rebase --autosquash -i origin/dev
+  fom = fetch origin main
+  cofm = "!f() { git fom && git co -b $1 origin/main; }; f"
+  from = !git fom && git rebase --autosquash -i origin/main
   st = status
+  s = status
   ctags = !.git/hooks/ctags
   llog = log --date=local
   flog = log --pretty=fuller --decorate
+  latest-branches = br --sort=-committerdate
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   lol = log --graph --decorate --oneline
   lola = log --graph --decorate --oneline --all
   copy-pr-url = !gh pr view --json url | jq -r .url | pbcopy
   merge-prod = "!${HOME}/.bin/merge-prod.sh"
   wip = "!f() { git add . && git commit -m \"WIP: $@\" -n; }; f"
-  unwip = !git --no-pager log --pretty=oneline -n 1 && git reset head~
+  unwip = !git --no-pager log --pretty=oneline -n 1 && git reset HEAD~
 [core]
   excludesfile = ~/.gitignore
 	autocrlf = false
+	editor = vim
 [init]
 	defaultBranch = main
 [diff]
