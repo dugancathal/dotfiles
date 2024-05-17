@@ -3,3 +3,8 @@ alias pbpaste='xclip -selection clipboard -o'
 
 alias be='bundle exec'
 alias ber='bundle exec rake'
+
+alias jk='npx jake'
+alias g='git'
+
+alias gtw='cd ~/workspace/github.com/SuiteCloudStudios/saturn'
