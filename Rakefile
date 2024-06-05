@@ -20,6 +20,11 @@ task :install do
   system %Q{mkdir ~/.tmp}
 end
 
+desc 'Install oh-my-zsh'
+task :ohmyzsh do
+  sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+end
+
 def replace_file(file)
   system %Q{rm "$HOME/.#{file}"}
   link_file(file)
