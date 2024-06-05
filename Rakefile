@@ -25,6 +25,17 @@ task :ohmyzsh do
   sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
 end
 
+desc 'Install asdf'
+task :asdf do
+  sh 'git clone https://github.com/asdf-vm/asdf $HOME/.asdf'
+end
+
+desc 'Install ruby via asdf'
+task :ruby => [:asdf] do
+  sh 'asdf plugin add ruby'
+  sh 'asdf ruby install 3.3.1'
+end
+
 def replace_file(file)
   system %Q{rm "$HOME/.#{file}"}
   link_file(file)
