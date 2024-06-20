@@ -41,6 +41,7 @@
   s = status
   ctags = !.git/hooks/ctags
   llog = log --date=local
+  lgs = !git -P log -n10 --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
   flog = log --pretty=fuller --decorate
   latest-branches = br --sort=-committerdate
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -48,8 +49,17 @@
   lola = log --graph --decorate --oneline --all
   copy-pr-url = !gh pr view --json url | jq -r .url | pbcopy
   merge-prod = "!${HOME}/.bin/merge-prod.sh"
-  wip = "!f() { git add . && git commit -m \"WIP: $@\" -n; }; f"
+  wip = "!f() { git add . && git commit -m \"[skip ci] WIP: $@\" -n; }; f"
   unwip = !git --no-pager log --pretty=oneline -n 1 && git reset HEAD~
+  recent = "!recent() { \
+        git for-each-ref \
+                refs/heads/ \
+                --sort=-committerdate \
+                --color \
+                --format='%(HEAD) %(objectname:short)|%(refname:short)|%(committerdate:relative)' \
+        | column -ts'|' \
+        | head -n ${1:-10}; \
+  }; recent"
 [core]
   excludesfile = ~/.gitignore
 	autocrlf = false
