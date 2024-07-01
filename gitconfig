@@ -60,6 +60,7 @@
         | column -ts'|' \
         | head -n ${1:-10}; \
   }; recent"
+  cbc = "!cbc() { for commit in $(git log --format='%h' origin/main..); do git show $commit; done }; cbc"
 [core]
   excludesfile = ~/.gitignore
 	autocrlf = false
