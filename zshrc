@@ -11,6 +11,6 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-. $HOME/.asdf/asdf.sh
-
 [[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
+
+. "$(brew --prefix asdf)/libexec/asdf.sh"
