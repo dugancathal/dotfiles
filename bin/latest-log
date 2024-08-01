@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'date'
+
+service_log_directories = Dir[File.expand_path("~/.SuiteStudios/App/Logs/*")].grep_v(/-ui/)
+latest_logdir, _ = service_log_directories.map { [_1, DateTime.strptime(File.basename(_1), "%Y.%m.%d-%H.%M.%S")] }.sort_by(&:last).last
+latest_logfile = Dir["#{latest_logdir}/*.app.log"].first
+
+$stderr.puts "Latest file is: #{latest_logfile}"
+
+if tail = ARGV.find { _1.start_with?('-t') }
+  tail_amount = [tail.split('t').last.to_i, 10].max
+  exec "tail -#{tail_amount}f #{latest_logfile}"
+else
+  $stdout.puts latest_logfile
+end
