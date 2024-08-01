@@ -1,0 +1,155 @@
+#!/usr/bin/env ruby
+require 'tty-prompt'
+require 'slop'
+
+Commit = Struct.new(:sha, :subject, keyword_init: true) do
+  def to_s
+    "%-12s\t%s" % [sha, subject]
+  end
+end
+
+ShellResult = Struct.new(:output, :status, keyword_init: true) do
+  def success?
+    status.success?
+  end
+end
+
+class GitClient
+  attr_reader :mainline
+
+  def initialize(mainline:)
+    @mainline = mainline
+  end
+
+  def all_branches
+    @all_branches ||= begin
+      names = `git branch --list --format='%(refname:short)'`.lines.map(&:chomp)
+      without_current = names - [self.current_branch]
+      [current_branch] + names.sort_by(&:downcase)
+    end
+  end
+
+  def current_branch
+    `git rev-parse --abbrev-ref HEAD`.chomp
+  end
+
+  def previous_branch
+    `git rev-parse --abbrev-ref @{-1}`.chomp
+  end
+
+  def commits_on_branch(between: "#{mainline}..")
+    `git log #{between} --reverse --format='%h|%s'`.lines.map(&:chomp).map do |line|
+      sha, subject = line.split('|')
+      Commit.new(sha: sha, subject: subject)
+    end
+  end
+
+  def checkout(branch)
+    `git checkout #{branch}`
+  end
+
+  def checkout_new(branch, base: mainline)
+    `git checkout -b #{branch} #{base}`
+  end
+
+  def cherry_pick(commit)
+    output = `git cherry-pick #{commit} 2>&1`
+    status = $?
+    ShellResult.new(output: output, status: status)
+  end
+
+  def reorder_squash(commits, new_branch: previous_branch)
+    reordered = commits + (commits_on_branch - commits)
+    previous_squashed_commits = commits_on_branch.select { _1.subject.start_with?('SQUASHED') }
+    instructions = [
+      *previous_squashed_commits.map { "p #{_1.sha }" },
+      "p #{commits.first.sha}",
+      *(commits[1..].map { "f #{_1.sha}" }),
+      %Q{exec git commit --amend -m "SQUASHED to #{new_branch}"},
+      *((commits_on_branch - previous_squashed_commits - commits).map { "p #{_1.sha}" }),
+    ]
+    env = {
+      'REORDER_SQUASH_COMMITS' => instructions.join(','),
+      'GIT_SEQUENCE_EDITOR' => 'git rebase-helper reorder-squash',
+    }
+    system(env, "git rebase -i #{mainline}")
+  end
+end
+
+class ExtractCommand
+  def call(args)
+    opts = Slop.parse(args) do |o|
+      o.string '-m', '--mainline', 'The name of the mainline branch. Defaults to `origin/dev`', default: 'origin/dev'
+      o.on('-h', '--help') do
+        $stderr.puts "A tool to make it easier to create small PRs."
+        $stderr.puts "Run inside of a git repository to walk through the process of moving related"
+        $stderr.puts "  commits off a big branch to a smaller one."
+        $stderr.puts
+        $stderr.puts o
+        exit
+      end
+    end
+
+    prompt = TTY::Prompt.new
+    git = GitClient.new(mainline: opts[:mainline])
+
+    extract_from_branch = prompt.select('Which branch to extract *from*?', filter: true, default: git.current_branch) do |menu|
+      git.all_branches.each do |branch|
+        menu.choice branch
+      end
+    end
+
+    git.checkout(extract_from_branch) unless extract_from_branch == git.current_branch
+
+    commits = prompt.multi_select('Choose your commits to squash and cut over', filter: true, per_page: 20, echo: false) do |menu|
+      git.commits_on_branch.each do |commit|
+        menu.choice name: commit.to_s, value: commit
+      end
+    end
+
+    cut_to_branch = prompt.ask('Which branch to you want to cut over *to*?', default: git.previous_branch)
+
+    if git.all_branches.include?(cut_to_branch)
+      git.checkout(cut_to_branch)
+    else
+      git.checkout_new(cut_to_branch)
+    end
+
+    commits.each do |commit|
+      result = git.cherry_pick commit.sha
+      next if result.success?
+
+      $stdout.puts "=== Cherrypicking #{commit} failed."
+      $stdout.puts "=== Open a new window and follow the instructions to continue the cherry-pick."
+      $stdout.puts result.output.lines.map { "=== === #{_1}" }
+      prompt.keypress("=== Return here and press enter to continue.", keys: [:space, :return])
+    end
+
+    if prompt.yes?('Would you like me to squash these and commits on the *from* branch?')
+      git.checkout(extract_from_branch)
+      git.reorder_squash(commits)
+    end
+
+    $stdout.puts "Done"
+  end
+end
+
+class ReorderSquashCommand
+  def call(args)
+    instructions_file = ARGV[-1]
+    commit_instructions = ENV['REORDER_SQUASH_COMMITS'].split(',')
+
+    File.write(instructions_file, commit_instructions.join("\n"))
+  end
+end
+
+command = case ARGV[0]
+when 'extract' then ExtractCommand.new
+when 'reorder-squash' then ReorderSquashCommand.new
+else
+  $stderr.puts "I don't know that command."
+  $stderr.puts "Use one of `extract` or `reorder-squash`"
+  exit 1
+end
+
+command.call(ARGV[1..])

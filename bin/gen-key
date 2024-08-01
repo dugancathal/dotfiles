@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'securerandom'
+require 'base64'
+puts Base64.encode64(SecureRandom.bytes(32)).chomp
+

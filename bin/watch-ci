@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+sha=${1}
+if [[ -z "${sha}" ]]; then
+  sha="$(git symbolic-ref HEAD)"
+  sha="${sha#refs/heads/}"
+fi
+watch -n 5 ci.rb "${sha}"
+
