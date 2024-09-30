@@ -28,14 +28,14 @@
   recon = rebase --continue
   pbr = push -u origin HEAD
   pbrfl = push -u origin HEAD --force-with-lease
-  create-branch = !sh -c 'git push origin HEAD:refs/heads/$1 && git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
+  create-branch = !sh -c 'git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
   delete-branch = !sh -c 'git push origin :refs/heads/$1 && git remote prune origin && git branch -D $1' -
   merge-branch = !git checkout master && git merge @{-1} --ff-only
   psuh = push
   rebase-origin = !git fetch origin && git rebase origin/master
   stale-locals = !git for-each-ref --format '%(refname:short) %(upstream:track)'  | grep '\\[gone\\]' | awk '{print $1}'
   fom = fetch origin main
-  cofm = "!f() { git fom && git co -b $1 origin/main; }; f"
+  cofm = "!f() { git fom && git co -b $1 origin/main; git br --unset-upstream $1; }; f"
   from = !git fom && git rebase --autosquash -i origin/main
   st = status
   s = status
@@ -71,6 +71,7 @@
 	tool = opendiff
 [merge]
 	tool = opendiff
+	ff = only
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
