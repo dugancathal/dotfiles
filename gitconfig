@@ -1,11 +1,11 @@
 [user]
 	name = TJ Taylor
-	email = tj@mobilize.io
+	email = dugancathal@gmail.com
 	signingkey = 35DA3202
 [push]
 	default = current
 [core]
-	excludesfile = /Users/ttaylor/.gitignore
+	excludesfile = /Users/tjtaylor/.gitignore
 
 # DO NOT EDIT BELOW THIS LINE
 
