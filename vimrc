@@ -1,4 +1,7 @@
-:source $VIMRUNTIME/defaults.vim
+source $VIMRUNTIME/defaults.vim
+syntax on
+filetype on
+set autoindent
 
 " Open a notes file (in `tmp/notes.md`) with 'no+ENTER' - will return to the
 " tab if it already exists
