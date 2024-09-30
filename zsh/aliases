@@ -1,2 +1,10 @@
+# Ruby
 alias be='bundle exec'
 alias ber='bundle exec rake'
+
+# Git
+alias g='git'
+
+# Workflow
+export CURRENT_PROJECT_DIR="$HOME/workspace/github.com/dugancathal/dotfiles"
+alias gtw="cd $CURRENT_PROJECT_DIR"
