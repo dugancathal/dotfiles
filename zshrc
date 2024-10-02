@@ -13,6 +13,8 @@ compinit
 
 [[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
 
-. "$(brew --prefix asdf)/libexec/asdf.sh"
+if which brew >/dev/null 2>&1; then
+  . "$(brew --prefix asdf)/libexec/asdf.sh"
+fi
 
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
