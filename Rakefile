@@ -1,4 +1,4 @@
-IGNORED_FILES = %w[Rakefile README LICENSE]
+IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
 
 desc "install the dot files into user's home directory"
 task :install do
@@ -58,12 +58,13 @@ end
 
 def merge_file(file)
   puts "merging ~/.#{file}"
-  if File.read("#{ENV['HOME']}/.#{file}").includes?('===tjtjrb-dotfiles===')
+  dest_dotfile = "#{ENV['HOME']}/.#{file}"
+  if File.exist?(dest_dotfile) && File.read(dest_dotfile).include?('===tjtjrb-dotfiles===')
     puts "already merged ~/.#{file}"
     return
   end
 
-  system %Q{cat <(echo "===tjtjrb-dotfiles===") "$PWD/#{file}" >> "$HOME/.#{file}"}
+  system %Q{bash -c 'cat <(echo -ne "\n\n# ===tjtjrb-dotfiles===\n\n") "$PWD/#{file}" >> "$HOME/.#{file}"'}
 end
 
 def ask(query)
