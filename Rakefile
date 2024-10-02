@@ -2,7 +2,6 @@ IGNORED_FILES = %w[Rakefile README LICENSE]
 
 desc "install the dot files into user's home directory"
 task :install do
-  replace_all = false
   Dir['*'].each do |file|
     next if IGNORED_FILES.include? file
     
@@ -15,6 +14,17 @@ task :install do
     else
       link_file(file)
     end
+  end
+
+  system %Q{mkdir ~/.tmp}
+end
+
+desc "install all dotfiles into the user's home directory, merging with existing as necessary"
+task :merge_install do
+  Dir['*'].each do |file|
+    next if IGNORED_FILES.include? file
+    
+    merge_file(file)
   end
 
   system %Q{mkdir ~/.tmp}
@@ -44,6 +54,16 @@ end
 def link_file(file)
   puts "linking ~/.#{file}"
   system %Q{ln -nsf "$PWD/#{file}" "$HOME/.#{file}"}
+end
+
+def merge_file(file)
+  puts "merging ~/.#{file}"
+  if File.read("#{ENV['HOME']}/.#{file}").includes?('===tjtjrb-dotfiles===')
+    puts "already merged ~/.#{file}"
+    return
+  end
+
+  system %Q{cat <(echo "===tjtjrb-dotfiles===") "$PWD/#{file}" >> "$HOME/.#{file}"}
 end
 
 def ask(query)
