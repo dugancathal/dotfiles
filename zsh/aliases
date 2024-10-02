@@ -7,4 +7,11 @@ alias g='git'
 
 # Workflow
 export CURRENT_PROJECT_DIR="$HOME/workspace/github.com/dugancathal/dotfiles"
-alias gtw="cd $CURRENT_PROJECT_DIR"
+function gtw() {
+  cd $CURRENT_PROJECT_DIR
+}
+
+# Github Codespaces
+function current-codespace() {
+  gh cs list --json name | jq -r '.[].name'
+}
