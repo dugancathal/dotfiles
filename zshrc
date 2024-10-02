@@ -11,10 +11,10 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-[[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
-
 if which brew >/dev/null 2>&1; then
   . "$(brew --prefix asdf)/libexec/asdf.sh"
 fi
+[[ -f "$HOME/.asdf/asdf.sh" ]] && . "$HOME/.asdf/asdf.sh"
 
+[[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
