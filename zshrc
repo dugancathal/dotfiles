@@ -18,3 +18,5 @@ fi
 
 [[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
+
+export EDITOR=vim

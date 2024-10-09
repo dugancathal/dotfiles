@@ -5,7 +5,8 @@
 [push]
 	default = current
 [core]
-	excludesfile = /Users/tjtaylor/.gitignore
+	excludesfile = /Users/tjtjrb/.gitignore
+	editor = vim
 
 # DO NOT EDIT BELOW THIS LINE
 
@@ -61,10 +62,6 @@
         | head -n ${1:-10}; \
   }; recent"
   cbc = "!cbc() { for commit in $(git log --format='%h' origin/main..); do git show $commit; done }; cbc"
-[core]
-  excludesfile = ~/.gitignore
-	autocrlf = false
-	editor = vim
 [init]
 	defaultBranch = main
 [diff]
