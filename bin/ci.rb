@@ -33,6 +33,10 @@ def job_status_url_for(job)
   "https://circleci.com/gh/#{PROJECT_SLUG}/#{job['job_number']}"
 end
 
+def truncate_name(name, max_length = 17)
+  name.size > 17 ? "#{name[0..14]}..." : name
+end
+
 if options[:open_status]
   $stderr.puts "Opening #{status_url} in a browser"
   `open "#{status_url}"`
@@ -47,14 +51,24 @@ if options[:open_failures]
   exit 0
 end
 
+ROW_FORMAT = "%-25<name>s\t%10<status>s\t%-20<current_step>s\t%<url>s" 
+header_row_values = { name: 'Name', status: 'Status', current_step: 'CurrentStep', url: 'URL' }
 
-puts "%-25<name>s\t%10<status>s\t%-20<current_step>s\t%<url>s" % { name: 'Name', status: 'Status', current_step: 'CurrentStep', url: 'URL' }
+puts ROW_FORMAT % header_row_values
 started_jobs.each do |job|
-  current_step = steps_by_job[job['job_number']].find {|step| step.dig('actions', 0, 'status') == 'running' && step['name'].downcase != 'task lifecycle' }
+  job_steps = steps_by_job[job['job_number']]
+
+  current_step = job_steps.find do |step| 
+    is_running = step.dig('actions', 0, 'status') == 'running' 
+    is_setting_up = step['name'].downcase == 'task lifecycle'
+    is_running && !is_setting_up
+  end
+
   current_step ||= { 'name' => 'Completed' }
 
-  current_step['name'] = current_step['name'].size > 17 ? current_step['name'][0..15] + "..." : current_step['name']
+  current_step['name'] = truncate_name(current_step['name'])
 
-  puts "%-25<name>s\t%10<status>s\t%-20<current_step>s\t%<url>s" % { name: job['name'], status: job['status'], current_step: current_step['name'], url: job_status_url_for(job) }
+  puts ROW_FORMAT % { name: job['name'], status: job['status'], current_step: current_step['name'], url: job_status_url_for(job) }
 end
+
 puts status_url
