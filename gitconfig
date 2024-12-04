@@ -76,3 +76,4 @@
 	required = true
 [rebase]
 	updateRefs = true
+	autoSquash = true
