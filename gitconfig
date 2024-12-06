@@ -5,7 +5,7 @@
 [push]
 	default = current
 [core]
-	excludesfile = /Users/tjtjrb/.gitignore
+	excludesfile = ~/.gitignore
 	editor = vim
 
 # DO NOT EDIT BELOW THIS LINE
