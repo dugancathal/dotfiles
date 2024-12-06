@@ -35,9 +35,9 @@
   psuh = push
   rebase-origin = !git fetch origin && git rebase origin/master
   stale-locals = !git for-each-ref --format '%(refname:short) %(upstream:track)'  | grep '\\[gone\\]' | awk '{print $1}'
-  fom = fetch origin main
-  cofm = "!f() { git fom && git co -b $1 origin/main; git br --unset-upstream $1; }; f"
-  from = !git fom && git rebase --autosquash -i origin/main
+  fom = !git fetch origin "${GIT_MAIN_BRANCH:-main}"
+  cofm = "!f() { git fom && git co -b $1 \"origin/${GIT_MAIN_BRANCH:-main}\"; git br --unset-upstream $1; }; f"
+  from = !git fom && git rebase --autosquash -i "origin/${GIT_MAIN_BRANCH:-main}"
   st = status
   s = status
   ctags = !.git/hooks/ctags
@@ -61,7 +61,7 @@
         | column -ts'|' \
         | head -n ${1:-10}; \
   }; recent"
-  cbc = "!cbc() { for commit in $(git log --format='%h' origin/main..); do git show $commit; done }; cbc"
+  cbc = "!cbc() { for commit in $(git log --reverse --format='%h' origin/main..); do git show $commit; done }; cbc"
 [init]
 	defaultBranch = main
 [diff]
