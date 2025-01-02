@@ -26,7 +26,9 @@
   cane = commit --no-e --am
   co = checkout
   br = branch
+  re = rebase
   recon = rebase --continue
+  reab = rebase --abort
   pbr = push -u origin HEAD
   pbrfl = push -u origin HEAD --force-with-lease
   create-branch = !sh -c 'git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
@@ -74,6 +76,8 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[rerere]
+	enabled = true
 [rebase]
 	updateRefs = true
 	autoSquash = true
