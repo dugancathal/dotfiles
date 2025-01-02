@@ -37,7 +37,12 @@ end
 
 desc 'Install asdf'
 task :asdf do
-  sh 'git clone https://github.com/asdf-vm/asdf $HOME/.asdf'
+  sh 'git clone https://github.com/asdf-vm/asdf ${HOME}/.asdf'
+end
+
+desc 'Install tmuxifier'
+task :tmuxifier do
+  sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.asdf"'
 end
 
 desc 'Install ruby via asdf'

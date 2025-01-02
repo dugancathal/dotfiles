@@ -20,3 +20,4 @@ fi
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
 
 export EDITOR=vim
+export PATH=$PATH:$HOME/.tmuxifier/bin
