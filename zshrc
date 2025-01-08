@@ -21,3 +21,10 @@ fi
 
 export EDITOR=vim
 export PATH=$PATH:$HOME/.tmuxifier/bin
+
+if which direnv >/dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
+fi
+if which fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
