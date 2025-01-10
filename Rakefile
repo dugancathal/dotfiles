@@ -1,54 +1,64 @@
 IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
 
-desc "install the dot files into user's home directory"
-task :install do
-  Dir['*'].each do |file|
-    next if IGNORED_FILES.include? file
-    
-    if File.exist?(File.join(ENV['HOME'], ".#{file}"))
-      if ask "overwrite ~/.#{file}?"
-        replace_file(file)
-      else
-        puts "skipping ~/.#{file}"
-      end
-    else
-      link_file(file)
+namespace :install do
+  desc 'Install everything'
+  task :all => %i[install:ohmyzsh install:tmuxifier install:ruby install:asdf install:dotfiles]
+
+  desc 'Install oh-my-zsh'
+  task :ohmyzsh do
+    sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+  end
+
+  desc 'Install asdf'
+  task :asdf do
+    sh 'git clone https://github.com/asdf-vm/asdf ${HOME}/.asdf'
+  end
+
+  desc 'Install tmuxifier'
+  task :tmuxifier do
+    sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.asdf"'
+  end
+
+  desc 'Install ruby via asdf'
+  task :ruby => [:asdf] do
+    sh 'asdf plugin add ruby'
+    sh 'asdf ruby install 3.3.1'
+  end
+
+  desc 'Install jrnl'
+  task :jrnl do
+    sh 'python3 -m pip install --user jrnl'
+  end
+
+  desc "install all dotfiles into the user's home directory, merging with existing as necessary"
+  task :merge_install do
+    Dir['*'].each do |file|
+      next if IGNORED_FILES.include? file
+
+      merge_file(file)
     end
+
+    system %Q{mkdir ~/.tmp}
   end
 
-  system %Q{mkdir ~/.tmp}
-end
+  desc "install the dot files into user's home directory"
+  task :dotfiles do
+    Dir['*'].each do |file|
+      next if IGNORED_FILES.include? file
 
-desc "install all dotfiles into the user's home directory, merging with existing as necessary"
-task :merge_install do
-  Dir['*'].each do |file|
-    next if IGNORED_FILES.include? file
-    
-    merge_file(file)
+      if File.exist?(File.join(ENV['HOME'], ".#{file}"))
+        if ask "overwrite ~/.#{file}?"
+          replace_file(file)
+        else
+          puts "skipping ~/.#{file}"
+        end
+      else
+        link_file(file)
+      end
+    end
+
+    system %Q{mkdir ~/.tmp}
   end
-
-  system %Q{mkdir ~/.tmp}
-end
-
-desc 'Install oh-my-zsh'
-task :ohmyzsh do
-  sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-end
-
-desc 'Install asdf'
-task :asdf do
-  sh 'git clone https://github.com/asdf-vm/asdf ${HOME}/.asdf'
-end
-
-desc 'Install tmuxifier'
-task :tmuxifier do
-  sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.asdf"'
-end
-
-desc 'Install ruby via asdf'
-task :ruby => [:asdf] do
-  sh 'asdf plugin add ruby'
-  sh 'asdf ruby install 3.3.1'
 end
 
 def replace_file(file)
