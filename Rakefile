@@ -16,7 +16,7 @@ namespace :install do
 
   desc 'Install tmuxifier'
   task :tmuxifier do
-    sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.asdf"'
+    sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.tmuxifier"'
   end
 
   desc 'Install ruby via asdf'
