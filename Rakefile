@@ -11,7 +11,11 @@ namespace :install do
 
   desc 'Install asdf'
   task :asdf do
-    sh 'git clone https://github.com/asdf-vm/asdf ${HOME}/.asdf'
+    if RUBY_PLATFORM.match(/darwin/)
+      sh "brew install asdf"
+    else
+      sh "apt install -y asdf"
+    end
   end
 
   desc 'Install tmuxifier'
