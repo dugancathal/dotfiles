@@ -1,4 +1,8 @@
 IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
+HOMEDIR = Pathname(ENV['HOME'])
+BIN_DIR = HOMEDIR.join(".bin")
+
+directory BIN_DIR
 
 namespace :install do
   desc 'Install everything'
@@ -6,20 +10,27 @@ namespace :install do
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh do
+    next if HOMEDIR.join('.oh-my-zsh').exist?
+
     sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
   end
 
   desc 'Install asdf'
-  task :asdf do
+  task :asdf => [BIN_DIR] do
     if RUBY_PLATFORM.match(/darwin/)
       sh "brew install asdf"
     else
-      sh "apt install -y asdf"
+      asdf_version = "v0.16.6"
+      arch = "dpkg --print-architecture".match?("arm") ? "arm" : "amd"
+      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.bin/asdf"
+      chmod_R 0775, BIN_DIR
     end
   end
 
   desc 'Install tmuxifier'
   task :tmuxifier do
+    next if HOMEDIR.join('.tmuxifier').exist?
+
     sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.tmuxifier"'
   end
 
