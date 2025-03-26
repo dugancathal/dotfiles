@@ -20,7 +20,7 @@ fi
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
 
 export EDITOR=vim
-export PATH=$PATH:${ASDF_DATA_DIR:-"$HOME"}/.asdf/shims:$HOME/.tmuxifier/bin:$(python3 -m site --user-base)/bin
+export PATH=$PATH:$HOME/.bin:${ASDF_DATA_DIR:-"$HOME"}/.asdf/shims:$HOME/.tmuxifier/bin:$(python3 -m site --user-base)/bin
 
 if which direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
