@@ -1,9 +1,9 @@
 require 'yaml'
 require 'httparty'
 require 'json'
+require_relative './repo'
 
 CIRCLE_TOKEN = ENV.fetch('CIRCLE_TOKEN') { raise 'Must set `CIRCLE_TOKEN` env var' }
-PROJECT_SLUG = `git remote get-url origin`.strip.split(':').last
 
 def current_branch(argv = ARGV)
   argv.first || `git symbolic-ref HEAD`.strip.split('refs/heads/').last
@@ -16,7 +16,7 @@ class CircleClient
   headers 'Circle-Token' => CIRCLE_TOKEN, 'Accept' => 'application/json'
 
   def pipelines_for(branch:)
-    self.class.get("/project/gh/#{PROJECT_SLUG}/pipeline", query: { branch: })
+    self.class.get("/project/gh/#{Repo.current.slug}/pipeline", query: { branch: })
   end
 
   def latest_pipeline_for(branch:)
@@ -43,6 +43,6 @@ class CircleClientV1
   headers 'Circle-Token' => CIRCLE_TOKEN, 'Accept' => 'application/json'
 
   def steps_for(job_number:)
-    self.class.get("/project/gh/#{PROJECT_SLUG}/#{job_number}")['steps']
+    self.class.get("/project/gh/#{Repo.current.slug}/#{job_number}")['steps']
   end
 end

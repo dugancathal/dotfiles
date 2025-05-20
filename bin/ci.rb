@@ -27,10 +27,10 @@ jobs = client.jobs_for(workflow_id: workflow['id'])
 started_jobs = jobs.reject {|job| !job['started_at'] }.sort_by { |job| job['started_at'] }
 steps_by_job = jobs.each_with_object({}) { |job, h| h[job['job_number']] = step_client.steps_for(job_number: job['job_number']) }
 
-status_url = "https://app.circleci.com/pipelines/gh/#{PROJECT_SLUG}/#{pipeline['number']}/workflows/#{workflow['id']}"
+status_url = "https://app.circleci.com/pipelines/gh/#{Repo.current.slug}/#{pipeline['number']}/workflows/#{workflow['id']}"
 
 def job_status_url_for(job)
-  "https://circleci.com/gh/#{PROJECT_SLUG}/#{job['job_number']}"
+  "https://circleci.com/gh/#{Repo.current.slug}/#{job['job_number']}"
 end
 
 def truncate_name(name, max_length = 17)
