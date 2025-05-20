@@ -38,6 +38,7 @@
   rebase-origin = !git fetch origin && git rebase origin/master
   stale-locals = !git for-each-ref --format '%(refname:short) %(upstream:track)'  | grep '\\[gone\\]' | awk '{print $1}'
   fom = !git fetch origin "${GIT_MAIN_BRANCH:-main}"
+  com = !git checkout "${GIT_MAIN_BRANCH:-main}"
   cofm = "!f() { git fom && git co -b $1 \"origin/${GIT_MAIN_BRANCH:-main}\"; git br --unset-upstream $1; }; f"
   from = !git fom && git rebase --autosquash -i "origin/${GIT_MAIN_BRANCH:-main}"
   st = status
@@ -64,6 +65,8 @@
         | head -n ${1:-10}; \
   }; recent"
   cbc = "!cbc() { for commit in $(git log --reverse --format='%h' origin/main..); do git show $commit; done }; cbc"
+  branches-in-tree = "!branches() { git branch --merged HEAD | grep -vE '[[:blank:]]main' | grep -Eo '[[:blank:]][[:alnum:]].+'; }; branches"
+
 [init]
 	defaultBranch = main
 [diff]
