@@ -1,9 +1,22 @@
+# Editing
+function vimf() {
+  if [[ "$#" -eq 0 ]]; then
+    vim "$(fzf)"
+  else
+    vim "$(fzf -1 -q "$1")"
+  fi
+}
+alias vim='nvim'
+
 # Ruby
 alias be='bundle exec'
 alias ber='bundle exec rake'
 
 # Git
 alias g='git'
+
+# Handy
+alias uuid="uuidgen | tee /dev/tty | pbcopy"
 
 # Workflow
 export CURRENT_PROJECT_DIR="$HOME/workspace/github.com/dugancathal/dotfiles"
