@@ -16,7 +16,7 @@ class Repo
 
   def remote(named: "origin")
     Dir.chdir(@cwd) do
-      `git remote get-url origin`.strip 
+      `git remote get-url #{named}`.strip 
     end
   end
 end

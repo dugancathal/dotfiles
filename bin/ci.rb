@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
-require_relative './circle'
+require_relative '../rubylib/rubylib'
+require 'ci'
+require 'ci/circle'
 require 'optparse'
 
 options = {}
@@ -21,7 +23,7 @@ end.parse!
 
 client = CircleClient.new
 step_client = CircleClientV1.new
-pipeline = client.latest_pipeline_for(branch: current_branch(argv))
+pipeline = client.latest_pipeline_for(branch: Ci.current_branch(argv))
 workflow = client.latest_workflow_for(pipeline_id: pipeline['id'])
 jobs = client.jobs_for(workflow_id: workflow['id'])
 started_jobs = jobs.reject {|job| !job['started_at'] }.sort_by { |job| job['started_at'] }

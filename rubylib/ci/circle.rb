@@ -1,13 +1,9 @@
 require 'yaml'
 require 'httparty'
 require 'json'
-require_relative './repo'
+require 'ci/repo'
 
-CIRCLE_TOKEN = ENV.fetch('CIRCLE_TOKEN') { raise 'Must set `CIRCLE_TOKEN` env var' }
-
-def current_branch(argv = ARGV)
-  argv.first || `git symbolic-ref HEAD`.strip.split('refs/heads/').last
-end
+CIRCLE_TOKEN = -> { ENV.fetch('CIRCLE_TOKEN') { raise 'Must set `CIRCLE_TOKEN` env var' } }
 
 class CircleClient
   include HTTParty
