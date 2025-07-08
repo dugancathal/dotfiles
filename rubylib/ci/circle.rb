@@ -45,9 +45,11 @@ class CircleClient
     started_jobs = jobs.reject {|job| !job['started_at'] }.sort_by { |job| job['started_at'] }
 
     step_client = CircleClientV1.new
-    started_jobs.each_with_object({}) do |job, h|
+    steps_by_job = started_jobs.each_with_object({}) do |job, h|
       h[job['job_number']] = step_client.steps_for(job_number: job['job_number'])
     end
+
+    started_jobs.map { Job.from(_1.merge("steps" => steps_by_job[_1["job_number"]])) }
   end
 
   class Job < Ci::Job
@@ -57,13 +59,28 @@ class CircleClient
 
     def self.from(api)
       steps = Array(api["steps"]).map { JobStep.from(_1) }
-      self.new(**api.merge(steps:, url: self.build_url(job_number: api["job_number"])))
+      self.new(**api.merge("steps" => steps, "url" => self.build_url(job_number: api["job_number"])))
     end
 
+    def initialize(**attrs)
+      @attrs = attrs
+    end
+
+    def dependencies = @attrs["dependencies"]
+    def id = @attrs["id"]
+    def job_number = @attrs["job_number"]
+    def name = @attrs["name"]
+    def project_slug = @attrs["project_slug"]
+    def started_at = @attrs["started_at"]
+    def status = @attrs["status"]
+    def steps = Array(@attrs["steps"])
+    def stopped_at = @attrs["stopped_at"]
+    def type = @attrs["type"]
+    def url = @attrs["url"]
+
     def current_step
-      current_step = job_steps.find(&:running?)
-      current_step ||= JobStep.completed
-      current_step['name'] = truncate_name(current_step['name'])
+      current_step = steps.find(&:running?)
+      current_step ||= JobStep.complete
     end
   end
 

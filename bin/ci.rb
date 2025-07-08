@@ -48,8 +48,14 @@ ROW_FORMAT = "%-25<name>s\t%10<status>s\t%-20<current_step>s\t%<url>s"
 header_row_values = { name: 'Name', status: 'Status', current_step: 'CurrentStep', url: 'URL' }
 
 puts ROW_FORMAT % header_row_values
+
 jobs.each do |job|
-  puts ROW_FORMAT % { name: job.name, status: job.status, current_step: job.current_step.name, url: job.url }
+  puts ROW_FORMAT % {
+    name: truncate_name(job.name),
+    status: job.status,
+    current_step: truncate_name(job.current_step.name),
+    url: job.url
+  }
 end
 
 puts status_url

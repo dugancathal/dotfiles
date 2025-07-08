@@ -2,7 +2,7 @@ $LOAD_PATH << File.expand_path('.', __dir__)
 
 require 'bundler/inline'
 
-gemfile(true) do
+gemfile do
   source 'https://rubygems.org'
 
   gem 'httparty', require: true
