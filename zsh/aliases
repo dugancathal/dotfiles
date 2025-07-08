@@ -6,6 +6,8 @@ function vimf() {
     vim "$(fzf -1 -q "$1")"
   fi
 }
+
+alias v=nvim
 alias vim='nvim'
 
 # Ruby
