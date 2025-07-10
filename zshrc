@@ -22,3 +22,5 @@ fi
 if which fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
 fi
+
+export PATH=$PATH:$HOME/.bin:${ASDF_SHIM_DIR}:$TMUXIFIER_BIN:$PYTHON3_BIN

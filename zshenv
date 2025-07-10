@@ -7,6 +7,4 @@ export EDITOR=vim
 export ASDF_SHIM_DIR="${ASDF_DATA_DIR:-"$HOME"}/.asdf/shims"
 export TMUXIFIER_BIN="${HOME}/.tmuxifier/bin"
 export PYTHON3_BIN="$(python3 -m site --user-base)/bin"
-export PATH=$PATH:$HOME/.bin:${ASDF_SHIM_DIR}:$TMUXIFIER_BIN:$PYTHON3_BIN
-
 
