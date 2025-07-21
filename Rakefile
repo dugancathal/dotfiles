@@ -8,7 +8,7 @@ directory BIN_DIR
 
 namespace :install do
   desc 'Install everything'
-  task :all => %i[install:ohmyzsh install:tmuxifier install:ruby install:asdf install:dotfiles install:neovim]
+  task :all => %i[install:ohmyzsh install:tmuxifier install:ruby install:asdf install:dotfiles install:neovim install:fzf]
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh do
@@ -45,6 +45,11 @@ namespace :install do
   desc 'Install neovim'
   task :neovim do
     sh 'brew install neovim'
+  end
+
+  desc 'Install fzf'
+  task :fzf do
+    sh 'brew install fzf'
   end
 
   desc 'Install jrnl'
