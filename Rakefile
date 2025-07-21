@@ -1,3 +1,5 @@
+require 'pathname'
+
 IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
 HOMEDIR = Pathname(ENV['HOME'])
 BIN_DIR = HOMEDIR.join(".bin")
