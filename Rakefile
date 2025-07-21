@@ -39,7 +39,7 @@ namespace :install do
   desc 'Install ruby via asdf'
   task :ruby => [:asdf] do
     sh 'asdf plugin add ruby'
-    sh 'asdf ruby install 3.3.1'
+    sh 'asdf install ruby latest'
   end
 
   desc 'Install jrnl'
