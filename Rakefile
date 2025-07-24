@@ -86,6 +86,13 @@ namespace :install do
 
     system %Q{mkdir ~/.tmp}
   end
+
+  namespace :mac do
+    desc "Install macos packages with homebrew"
+    rule(/.*/) do |t|
+      sh "brew install #{t.name.split(':').last}"
+    end
+  end
 end
 
 def replace_file(file)
