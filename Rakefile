@@ -4,29 +4,23 @@ IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
 HOMEDIR = Pathname(ENV['HOME'])
 BIN_DIR = HOMEDIR.join(".bin")
 
+OS_NAME = case RbConfig::CONFIG['host_os']
+  when /linux/ then 'linux'
+  when /darwin/ then 'mac'
+  else raise "OS not supported: #{RbConfig::CONFIG['host_os']}"
+end
+
 directory BIN_DIR
 
 namespace :install do
   desc 'Install everything'
-  task :all => %i[install:ohmyzsh install:tmuxifier install:ruby install:asdf install:dotfiles install:neovim install:fzf]
+  task :all => %I[install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:asdf install:dotfiles install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh do
     next if HOMEDIR.join('.oh-my-zsh').exist?
 
     sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
-  end
-
-  desc 'Install asdf'
-  task :asdf => [BIN_DIR] do
-    if RUBY_PLATFORM.match(/darwin/)
-      sh "brew install asdf"
-    else
-      asdf_version = "v0.16.6"
-      arch = "dpkg --print-architecture".match?("arm") ? "arm" : "amd"
-      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.bin/asdf"
-      chmod_R 0775, BIN_DIR
-    end
   end
 
   desc 'Install tmuxifier'
@@ -37,19 +31,9 @@ namespace :install do
   end
 
   desc 'Install ruby via asdf'
-  task :ruby => [:asdf] do
+  task :ruby => [:"#{OS_NAME}:asdf"] do
     sh 'asdf plugin add ruby'
     sh 'asdf install ruby latest'
-  end
-
-  desc 'Install neovim'
-  task :neovim do
-    sh 'brew install neovim'
-  end
-
-  desc 'Install fzf'
-  task :fzf do
-    sh 'brew install fzf'
   end
 
   desc 'Install jrnl'
@@ -91,6 +75,21 @@ namespace :install do
     desc "Install macos packages with homebrew"
     rule(/.*/) do |t|
       sh "brew install #{t.name.split(':').last}"
+    end
+  end
+
+  namespace :linux do
+    desc 'Install asdf'
+    task :asdf => [BIN_DIR] do
+      asdf_version = "v0.16.6"
+      arch = "dpkg --print-architecture".match?("arm") ? "arm" : "amd"
+      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.bin/asdf"
+      chmod_R 0775, BIN_DIR
+    end
+
+    desc "Install linux packages with apt"
+    rule(/.*/) do |t|
+      sh "apt install -y #{t.name.split(':').last}"
     end
   end
 end
