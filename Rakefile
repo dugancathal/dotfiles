@@ -14,10 +14,10 @@ directory BIN_DIR
 
 namespace :install do
   desc 'Install everything'
-  task :all => %I[install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:asdf install:dotfiles install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
+  task :all => %I[install:dotfiles install:#{OS_NAME}:zsh install:#{OS_NAME}:asdf install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
 
   desc 'Install oh-my-zsh'
-  task :ohmyzsh do
+  task :ohmyzsh => [:"install:#{OS_NAME}:zsh"] do
     next if HOMEDIR.join('.oh-my-zsh').exist?
 
     sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
