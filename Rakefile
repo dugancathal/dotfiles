@@ -73,7 +73,7 @@ namespace :install do
 
   namespace :mac do
     desc "Install macos packages with homebrew"
-    rule(/.*/) do |t|
+    rule(/install:mac:.*/) do |t|
       sh "brew install #{t.name.split(':').last}"
     end
   end
@@ -88,7 +88,7 @@ namespace :install do
     end
 
     desc "Install linux packages with apt"
-    rule(/.*/) do |t|
+    rule(/install:linux:.*/) do |t|
       sh "apt install -y #{t.name.split(':').last}"
     end
   end
