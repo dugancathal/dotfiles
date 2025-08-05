@@ -108,12 +108,12 @@ def merge_file(file)
   puts "merging ~/.#{file}"
   dest_dotfile = "#{ENV['HOME']}/.#{file}"
 
-  return if Dir.exist?(file)
-
   if !File.exist?(dest_dotfile)
     link_file(file)
     return
   end
+
+  return if Dir.exist?(file)
 
   if File.read(dest_dotfile).include?('===tjtjrb-dotfiles===')
     puts "already merged ~/.#{file}"
