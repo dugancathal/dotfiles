@@ -1,7 +1,7 @@
 require 'pathname'
 
 IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
-HOMEDIR = Pathname(ENV['HOME'])
+HOMEDIR = Pathname(Dir.home)
 BIN_DIR = HOMEDIR.join(".local/bin")
 
 OS_NAME = case RbConfig::CONFIG['host_os']
