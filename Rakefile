@@ -1,14 +1,10 @@
-require 'pathname'
+require_relative "setup_lib/dotfiles"
 
-IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
-HOMEDIR = Pathname(Dir.home)
+IGNORED_FILES = Dotfiles::IGNORED_FILES
+HOMEDIR = Dotfiles.dest
 BIN_DIR = HOMEDIR.join(".local/bin")
 
-OS_NAME = case RbConfig::CONFIG['host_os']
-  when /linux/ then 'linux'
-  when /darwin/ then 'mac'
-  else raise "OS not supported: #{RbConfig::CONFIG['host_os']}"
-end
+OS_NAME = Dotfiles.os_name
 
 directory BIN_DIR
 
