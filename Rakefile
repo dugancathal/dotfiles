@@ -7,6 +7,7 @@ BIN_DIR = HOMEDIR.join(".local/bin")
 OS_NAME = Dotfiles.os_name
 
 directory BIN_DIR
+directory HOMEDIR.join(".tmp")
 
 namespace :install do
   desc 'Install everything'
@@ -39,13 +40,7 @@ namespace :install do
 
   desc "install all dotfiles into the user's home directory, merging with existing as necessary"
   task :merge_install do
-    Dir['*'].each do |file|
-      next if IGNORED_FILES.include? file
-
-      merge_file(file)
-    end
-
-    system %Q{mkdir ~/.tmp}
+    Dotfiles.merge_install
   end
 
   desc "install the dot files into user's home directory"
@@ -98,25 +93,6 @@ end
 def link_file(file)
   puts "linking ~/.#{file}"
   system %Q{ln -nsf "$PWD/#{file}" "$HOME/.#{file}"}
-end
-
-def merge_file(file)
-  puts "merging ~/.#{file}"
-  dest_dotfile = "#{ENV['HOME']}/.#{file}"
-
-  if !File.exist?(dest_dotfile)
-    link_file(file)
-    return
-  end
-
-  return if Dir.exist?(file)
-
-  if File.read(dest_dotfile).include?('===tjtjrb-dotfiles===')
-    puts "already merged ~/.#{file}"
-    return
-  end
-
-  system %Q{bash -c 'cat <(echo -ne "\n\n# ===tjtjrb-dotfiles===\n\n") "$PWD/#{file}" >> "$HOME/.#{file}"'}
 end
 
 def ask(query)
