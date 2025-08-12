@@ -2,7 +2,7 @@ require 'pathname'
 
 IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE]
 HOMEDIR = Pathname(ENV['HOME'])
-BIN_DIR = HOMEDIR.join(".bin")
+BIN_DIR = HOMEDIR.join(".local/bin")
 
 OS_NAME = case RbConfig::CONFIG['host_os']
   when /linux/ then 'linux'
@@ -83,7 +83,7 @@ namespace :install do
     task :asdf => [BIN_DIR] do
       asdf_version = "v0.16.6"
       arch = "dpkg --print-architecture".match?("arm") ? "arm" : "amd"
-      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.bin/asdf"
+      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.local/bin/asdf"
       chmod_R 0775, BIN_DIR
     end
 
