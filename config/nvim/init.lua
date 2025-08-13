@@ -17,6 +17,7 @@ local opts = {
 
 local plugins = {
   { "catppuccin/nvim", name = "catpuccin", priority = 1000 },
+  { "ibhagwan/fzf-lua", name = "fzf-lua", priority = 1000 },
   {
     "neovim/nvim-lspconfig",
   },
