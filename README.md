@@ -8,5 +8,5 @@ Setup
 
     git clone http://github.com/dugancathal/dotfiles.git ~/workspace/dotfiles
     cd ~/workspace/dotfiles
-    rake install:dotfiles
+    ./bootstrap.sh
 
