@@ -11,10 +11,8 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-if which brew >/dev/null 2>&1; then
-  . "$(brew --prefix asdf)/libexec/asdf.sh"
-fi
-[[ -f "$HOME/.asdf/asdf.sh" ]] && . "$HOME/.asdf/asdf.sh"
+
+export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN
 
 if which direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
@@ -22,5 +20,6 @@ fi
 if which fzf >/dev/null 2>&1; then
   source <(fzf --zsh)
 fi
-
-export PATH=$PATH:$HOME/.local/bin:${ASDF_SHIM_DIR}:$TMUXIFIER_BIN:$PYTHON3_BIN
+if which mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh --shims)"
+fi

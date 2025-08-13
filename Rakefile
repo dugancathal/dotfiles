@@ -11,7 +11,7 @@ directory HOMEDIR.join(".tmp")
 
 namespace :install do
   desc 'Install everything'
-  task :all => %I[install:dotfiles install:#{OS_NAME}:zsh install:#{OS_NAME}:asdf install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
+  task :all => %I[install:dotfiles install:#{OS_NAME}:zsh install:#{OS_NAME}:mise install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh => [:"install:#{OS_NAME}:zsh"] do
@@ -27,10 +27,12 @@ namespace :install do
     sh 'git clone https://github.com/jimeh/tmuxifier.git "${HOME}/.tmuxifier"'
   end
 
-  desc 'Install ruby via asdf'
-  task :ruby => [:"#{OS_NAME}:asdf"] do
-    sh 'asdf plugin add ruby'
-    sh 'asdf install ruby latest'
+  desc "Install mise"
+  task :mise => [:"install:#{OS_NAME}:mise"]
+
+  desc 'Install ruby via mise'
+  task :ruby => [:"install:#{OS_NAME}:mise"] do
+    sh 'mise install ruby@latest'
   end
 
   desc 'Install jrnl'
@@ -53,12 +55,9 @@ namespace :install do
   end
 
   namespace :linux do
-    desc 'Install asdf'
-    task :asdf => [BIN_DIR] do
-      asdf_version = "v0.16.6"
-      arch = "dpkg --print-architecture".match?("arm") ? "arm" : "amd"
-      sh "curl -L https://github.com/asdf-vm/asdf/releases/download/#{asdf_version}/asdf-#{asdf_version}-linux-#{arch}64.tar.gz | tar xzf - > ~/.local/bin/asdf"
-      chmod_R 0775, BIN_DIR
+    desc "Install mise on linux"
+    task :mise do
+      sh 'curl -s https://mise.run | sh'
     end
 
     desc "Install linux packages with apt"
