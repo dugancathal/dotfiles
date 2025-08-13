@@ -5,5 +5,8 @@
 
 export EDITOR=vim
 export TMUXIFIER_BIN="${HOME}/.tmuxifier/bin"
-export PYTHON3_BIN="$(python3 -m site --user-base)/bin"
+
+if which python >/dev/null 2>&1; then
+  export PYTHON3_BIN="$(python3 -m site --user-base)/bin"
+fi
 
