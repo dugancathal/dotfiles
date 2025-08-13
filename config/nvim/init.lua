@@ -28,6 +28,5 @@ require("lazy").setup(plugins, opts)
 require("catppuccin").setup()
 vim.cmd.colorscheme "catppuccin"
 
-local lsp = require("lspconfig")
-
-lsp.ruby_lsp.setup{}
+require("config.fzf")
+require("config.lsp")
