@@ -1,9 +1,9 @@
 # Editing
 function vimf() {
   if [[ "$#" -eq 0 ]]; then
-    vim "$(fzf)"
+    nvim "$(fzf)"
   else
-    vim "$(fzf -1 -q "$1")"
+    nvim "$(fzf -1 -q "$1")"
   fi
 }
 
