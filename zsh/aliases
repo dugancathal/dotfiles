@@ -38,5 +38,5 @@ function codespace-named() {
     return
   fi
 
-  gh cs list --json displayName,name | jq -r "map(select(.displayName == \"${1}\"))[0] | .name"
+  gh cs list --json displayName,name | jq -r "map(select(.displayName | contains(\"${1}\")))[0] | .name"
 }
