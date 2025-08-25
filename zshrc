@@ -12,7 +12,8 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
-
+export ZSH_THEME=robbyrussell
+source $HOME/.oh-my-zsh/oh-my-zsh.sh
 export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN
 
 if which direnv >/dev/null 2>&1; then
