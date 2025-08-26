@@ -6,7 +6,7 @@
 	default = current
 [core]
 	excludesfile = ~/.gitignore
-	editor = vim
+	editor = nvim
 
 # DO NOT EDIT BELOW THIS LINE
 
