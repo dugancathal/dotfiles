@@ -1,3 +1,4 @@
+# ===dotfiles===
 # Always sourced first by zsh, use this for setting vars, not calling functions
 
 [[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
