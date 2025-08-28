@@ -2,6 +2,14 @@ vim.bo.expandtab=true
 vim.bo.tabstop=2
 vim.bo.shiftwidth=2
 vim.bo.softtabstop=2
+vim.opt.smartindent = true
+
+vim.opt.nu = true
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+vim.opt.scrolloff = 8
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
