@@ -11,7 +11,16 @@ directory HOMEDIR.join(".tmp")
 
 namespace :install do
   desc 'Install everything'
-  task :all => %I[install:dotfiles install:#{OS_NAME}:zsh install:#{OS_NAME}:mise install:ohmyzsh install:tmuxifier install:ruby install:#{OS_NAME}:neovim install:#{OS_NAME}:fzf]
+  task :all => %I[
+    install:dotfiles
+    install:#{OS_NAME}:zsh
+    install:#{OS_NAME}:mise
+    install:ohmyzsh
+    install:tmuxifier
+    install:ruby
+    install:#{OS_NAME}:neovim
+    install:#{OS_NAME}:fzf
+  ]
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh => [:"install:#{OS_NAME}:zsh"] do
