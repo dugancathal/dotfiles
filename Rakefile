@@ -20,6 +20,8 @@ namespace :install do
     install:ruby
     install:#{OS_NAME}:neovim
     install:#{OS_NAME}:fzf
+    install:#{OS_NAME}:jira
+    install:#{OS_NAME}:gh
   ]
 
   desc 'Install oh-my-zsh'
@@ -57,6 +59,14 @@ namespace :install do
   task :dotfiles => [:merge_install]
 
   namespace :mac do
+    desc "Install jira CLI"
+    task :jira do
+      sh <<~BASH
+        brew tap ankitpokhrel/jira-cli
+        brew install jira-cli
+      BASH
+    end
+
     desc "Install macos packages with homebrew"
     rule(/install:mac:.*/) do |t|
       sh "brew install #{t.name.split(':').last}"
@@ -67,6 +77,38 @@ namespace :install do
     desc "Install mise on linux"
     task :mise do
       sh 'curl -s https://mise.run | sh'
+    end
+
+    desc "Install github CLI (gh)"
+    task :gh do
+      is_ubuntu = !`cat /etc/debian_version 2>/dev/null`.empty?
+      next unless is_ubuntu
+
+      # Shamelessly stolen from https://github.com/cli/cli/blob/trunk/docs/install_linux.md#debian
+      sh <<~BASH
+        (type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
+          && sudo mkdir -p -m 755 /etc/apt/keyrings \
+          && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+          && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+          && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+          && sudo mkdir -p -m 755 /etc/apt/sources.list.d \
+          && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+          && sudo apt update \
+          && sudo apt install gh -y
+      BASH
+    end
+
+    desc "Install jira CLI"
+    task :jira do
+      require 'json'
+      releases = JSON.parse(`curl -sL -H 'accept: application/json' https://api.github.com/repos/ankitpokhrel/jira-cli/releases/latest | jq '.assets[] | select(.name | contains("linux"))'
+`)
+      arch = `uname -m`
+      asset = releases["assets"].find { _1["name"] =~ /linux/ && _1 =~ /#{arch}/ }
+      sh "curl -sL #{asset["browser_download_url"]} > /tmp/jira.tgz"
+
+      # We assume the binary is in <something>/bin/jira
+      sh "tar xzf /tmp/jira.tgz --wildcards '*/bin/jira' --strip-components=2"
     end
 
     desc "Install linux packages with apt"
