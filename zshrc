@@ -1,5 +1,8 @@
 # ===dotfiles===
 # Lines configured by zsh-newuser-install
+export ZSH_THEME=robbyrussell
+source $HOME/.oh-my-zsh/oh-my-zsh.sh
+
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
