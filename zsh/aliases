@@ -20,6 +20,12 @@ alias g='git'
 
 # Handy
 alias uuid="uuidgen | tee /dev/tty | pbcopy"
+function genpass() {
+  local dict_file="/usr/share/dict/words"
+  local length="${1:-4}"
+  password="$(python3 -c "import random; print('-'.join(random.sample(open('/usr/share/dict/words').read().splitlines(), 4)).lower())")"
+  echo "${password}" # chop dangling -
+}
 
 # Workflow
 export CURRENT_PROJECT_DIR="$HOME/workspace/github.com/dugancathal/dotfiles"
