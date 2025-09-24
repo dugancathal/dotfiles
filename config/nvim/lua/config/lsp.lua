@@ -1,6 +1,5 @@
 -- ===dotfiles===
-local lsp = require("lspconfig")
 
-lsp.pyright.setup{}
-lsp.ruby_lsp.setup{}
-lsp.ts_ls.setup{}
+vim.lsp.enable('pyright')
+vim.lsp.enable('ruby_lsp')
+vim.lsp.enable('ts_ls')
