@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ===dotfiles===
 
 set -e
 set -x

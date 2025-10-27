@@ -1,4 +1,5 @@
 #compdef watch-ci
+# ===dotfiles===
 
 local -a branches
 branches=( ${(f)"$(git branch --format='%(refname:short)')"} )
