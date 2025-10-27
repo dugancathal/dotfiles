@@ -1,0 +1,53 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+UpdateStatus = Data.define(:dir, :clean) do
+  def clean? = clean
+end
+
+def repolist
+  env_dirs = ENV.fetch('REPOLIST', '').split(',').map(&:strip).reject(&:empty?)
+  return env_dirs if env_dirs && !env_dirs.empty?
+  return ARGV if ARGV.any?
+  []
+end
+
+def process_repo(dir)
+  begin
+    Dir.chdir(dir) do
+      return unless File.directory?('.git')
+      return unless system("git fetch --all >/dev/null 2>&1")
+
+      status = `git status --porcelain 2>&1`.strip
+
+      if $?.success? && status.empty?
+        if system("git pull --rebase origin main >/dev/null 2>&1")
+          return UpdateStatus.new(dir:, clean: true)
+        end
+      else
+        return UpdateStatus.new(dir:, clean: false)
+      end
+    end
+  rescue Errno::ENOENT => e
+    $stderr.puts "    [ERROR] Directory not found: #{dir}. Error: #{e.message}"
+  rescue StandardError => e
+    $stderr.puts "    [FATAL] An unexpected error occurred while processing #{dir}: #{e.message}"
+  end
+end
+
+# ==================== Main Execution ====================
+
+repos = repolist
+
+if repos.any?
+  update_statuses = repos.map { |dir| process_repo(dir) }
+  clean_repos, unclean_repos = update_statuses.partition { _1.clean? }
+
+  clean_repos.each do |repo|
+    puts "✅ #{repo.dir}"
+  end
+
+  unclean_repos.each do |repo|
+    puts "❌ #{repo.dir}"
+  end
+end
