@@ -18,6 +18,7 @@ namespace :install do
     install:ohmyzsh
     install:tmuxifier
     install:ruby
+    install:#{OS_NAME}:direnv
     install:#{OS_NAME}:neovim
     install:#{OS_NAME}:fzf
     install:#{OS_NAME}:jira
