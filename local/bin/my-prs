@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+
+require "json"
+require_relative "rblib/table"
+
+PullRequestReview = Data.define(:id, :author, :state) do
+  def self.fetch(pr)
+    raw = JSON.parse(`gh pr view --repo #{pr.repo} #{pr.number} --json 'reviews'`)
+    Array(raw["reviews"]).map { self.from_json(_1) }
+  end
+
+  def self.from_json(json)
+    self.new(
+      id: json["id"],
+      author: json.dig("author", "login"),
+      state: json["state"].downcase,
+    )
+  end
+
+  def approved? = state == 'approved'
+end
+
+PullRequest = Data.define(:number, :repo, :title, :web_url, :reviews) do
+  def self.fetch_mine
+    raw = JSON.parse(`gh search prs --state open --author @me --json 'number,repository,title,state,url' --sort interactions`)
+    raw.map { self.from_json(_1) }
+  end
+
+  def self.from_json(json)
+    self.new(
+      number: json["number"],
+      repo: json.dig("repository", "nameWithOwner"),
+      title: json["title"],
+      web_url: json["url"],
+      reviews: [],
+    )
+  end
+
+  def fetch_reviews
+    self.reviews.concat(PullRequestReview.fetch(self))
+  end
+
+  def review_state
+    '✓' * self.reviews.select(&:approved?).count
+  end
+
+  def to_s
+    "#{repo}##{number}"
+  end
+end
+
+my_prs = PullRequest.fetch_mine
+reviews = my_prs.each { _1.fetch_reviews }
+
+pretty_print_table(
+  %w[PR Title Reviews URL],
+  my_prs.map { [_1.to_s, _1.title, _1.review_state, _1.web_url] }
+)
