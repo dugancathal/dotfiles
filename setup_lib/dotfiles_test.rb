@@ -40,7 +40,7 @@ class TestDotfiles < Minitest::Test
   end
 end
 
-class TestDotfiles < Minitest::Test
+class TestDotfilesMerge < Minitest::Test
   def test_merge_install_copies_dotfiles
     with_tmp_proj(%w[zshrc zshenv]) do |src, dest|
       Dotfiles::MergeInstallation.new.call(to: dest, from: src)
@@ -52,7 +52,7 @@ class TestDotfiles < Minitest::Test
 
   def test_merge_install_appends_when_file_exists
     with_tmp_proj(%w[zshrc]) do |src, dest|
-      src.join("zshrc").write("new\ncontent\n")
+      src.join("zshrc").write("# ===dotfiles===\n\nnew\ncontent\n")
       dest.join(".zshrc").write("already exists\nwith\nsome\ncontent\n")
 
       Dotfiles::MergeInstallation.new.call(to: dest, from: src)
@@ -63,7 +63,6 @@ class TestDotfiles < Minitest::Test
         with
         some
         content
-
         # ===dotfiles===
 
         new
@@ -74,7 +73,7 @@ class TestDotfiles < Minitest::Test
 
   def test_merge_install_ignores_pre_merged_files
     with_tmp_proj(%w[zshrc]) do |src, dest|
-      src.join("zshrc").write("new\ncontent\n")
+      src.join("zshrc").write("# ===dotfiles===\n\nnew\ncontent\n")
       dest.join(".zshrc").write("already exists\n")
 
       Dotfiles::MergeInstallation.new.call(to: dest, from: src)
@@ -82,8 +81,25 @@ class TestDotfiles < Minitest::Test
 
       assert_equal dest.join(".zshrc").read, <<~TXT
         already exists
-
         # ===dotfiles===
+
+        new
+        content
+      TXT
+    end
+  end
+
+  def test_merge_install_ignores_regardless_of_comment_style
+    with_tmp_proj(%w[nvimrc.lua]) do |src, dest|
+      src.join("nvimrc.lua").write("-- ===dotfiles===\n\nnew\ncontent\n")
+      dest.join(".nvimrc.lua").write("already exists\n")
+
+      Dotfiles::MergeInstallation.new.call(to: dest, from: src)
+      Dotfiles::MergeInstallation.new.call(to: dest, from: src)
+
+      assert_equal dest.join(".nvimrc.lua").read, <<~TXT
+        already exists
+        -- ===dotfiles===
 
         new
         content

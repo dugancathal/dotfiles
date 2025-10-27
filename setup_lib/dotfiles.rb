@@ -93,8 +93,8 @@ module Dotfiles
       end
     end
 
-    def merge_content(to:, from:, comment_prefix: "#")
-      return if to.read.include?("#{comment_prefix} ===dotfiles===\n")
+    def merge_content(to:, from:)
+      return if to.read.include?("===dotfiles===\n")
       to.open("a") do |f|
         f.write(from.read)
       end
