@@ -21,3 +21,4 @@ vim.cmd.colorscheme "catppuccin"
 
 require("config.fzf")
 require("config.lsp")
+require("plugins.gitcoauthor")
