@@ -23,6 +23,7 @@ namespace :install do
     install:#{OS_NAME}:fzf
     install:#{OS_NAME}:jira
     install:#{OS_NAME}:gh
+    install:#{OS_NAME}:glow
   ]
 
   desc 'Install oh-my-zsh'
@@ -96,6 +97,17 @@ namespace :install do
           && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
           && sudo apt update \
           && sudo apt install gh -y
+      BASH
+    end
+
+    desc "Install glow/markdown render CLI"
+    task :glow do
+      # Taken from https://github.com/charmbracelet/glow?tab=readme-ov-file#package-manager
+      sh <<~BASH
+        sudo mkdir -p /etc/apt/keyrings
+        curl -fsSL https://repo.charm.sh/apt/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/charm.gpg
+        echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
+        sudo apt update && sudo apt install glow
       BASH
     end
 
