@@ -14,6 +14,8 @@ local plugins = {
   },
 }
 
+vim.o.winborder = "rounded"
+
 require("lazy").setup(plugins, opts)
 
 require("catppuccin").setup()
