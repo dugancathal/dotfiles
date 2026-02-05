@@ -126,7 +126,7 @@ namespace :install do
 
     desc "Install linux packages with apt"
     rule(/install:linux:.*/) do |t|
-      sh "apt install -y #{t.name.split(':').last}"
+      sh "sudo apt install -y #{t.name.split(':').last}"
     end
   end
 end
