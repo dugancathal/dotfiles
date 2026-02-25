@@ -17,7 +17,8 @@ compinit
 
 export ZSH_THEME=robbyrussell
 source $HOME/.oh-my-zsh/oh-my-zsh.sh
-export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN
+
+export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN:/opt/nvim-linux-x86_64/bin
 
 if which direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"

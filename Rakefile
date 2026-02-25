@@ -81,6 +81,15 @@ namespace :install do
       sh 'curl -s https://mise.run | sh'
     end
 
+    desc "Install neovim on linux"
+    task :neovim do
+      sh <<~SH
+        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+        sudo rm -rf /opt/nvim-linux-x86_64
+        sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+      SH
+    end
+
     desc "Install github CLI (gh)"
     task :gh do
       is_ubuntu = !`cat /etc/debian_version 2>/dev/null`.empty?
