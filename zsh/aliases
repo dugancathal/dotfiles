@@ -47,3 +47,11 @@ function codespace-named() {
 
   gh cs list --json displayName,name | jq -r "map(select(.displayName | contains(\"${1}\")))[0] | .name"
 }
+
+function ntfy() {
+  local topic="${1:-test}"
+  local msg="${2}"
+  curl -L -H "Authorization: Bearer ${NTFY_KEY}" \
+    "${NTFY_BASE_URL}/${topic}" \
+    -d "${msg}" "${@:3}"
+}

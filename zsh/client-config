@@ -1,3 +1,6 @@
 # ===dotfiles===
 # Example client configuration. Can be scripts or aliases
 # export CURRENT_PROJECT_DIR
+
+MAYBE_SECRETS_FILE="$HOME/.zsh/client-secrets"
+[[ -f "${MAYBE_SECRETS_FILE}" ]] && . "${MAYBE_SECRETS_FILE}"
