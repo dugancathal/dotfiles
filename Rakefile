@@ -30,7 +30,7 @@ namespace :install do
   task :ohmyzsh => [:"install:#{OS_NAME}:zsh"] do
     next if HOMEDIR.join('.oh-my-zsh').exist?
 
-    sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+    sh 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
   end
 
   desc 'Install tmuxifier'
