@@ -24,8 +24,6 @@ do
       end
     end
     f:close()
-  else
-    vim.notify("No co-author file found", vim.log.levels.WARN)
   end
 end
 
