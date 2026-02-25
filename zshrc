@@ -20,6 +20,10 @@ source $HOME/.oh-my-zsh/oh-my-zsh.sh
 
 export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN:/opt/nvim-linux-x86_64/bin
 
+# Load aliases
+[[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
+[[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
+
 if which direnv >/dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
