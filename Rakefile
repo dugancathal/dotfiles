@@ -13,18 +13,23 @@ namespace :install do
   desc 'Install everything'
   task :all => %I[
     install:dotfiles
-    install:#{OS_NAME}:zsh
-    install:#{OS_NAME}:mise
+    install:zsh
+    install:mise
     install:ohmyzsh
     install:tmuxifier
     install:ruby
-    install:#{OS_NAME}:direnv
-    install:#{OS_NAME}:neovim
-    install:#{OS_NAME}:fzf
-    install:#{OS_NAME}:jira
-    install:#{OS_NAME}:gh
-    install:#{OS_NAME}:glow
+    install:direnv
+    install:neovim
+    install:fzf
+    install:jira
+    install:gh
+    install:glow
   ]
+
+  %i[zsh mise direnv neovim fzf jira gh glow].each do |os_specific_task_name|
+    desc "Install #{os_specific_task_name}"
+    task os_specific_task_name => [:"install:#{OS_NAME}:#{os_specific_task_name}"]
+  end
 
   desc 'Install oh-my-zsh'
   task :ohmyzsh => [:"install:#{OS_NAME}:zsh"] do
@@ -58,6 +63,7 @@ namespace :install do
     Dotfiles.merge_install
   end
 
+  desc "Install dotfiles"
   task :dotfiles => [:merge_install]
 
   namespace :mac do
