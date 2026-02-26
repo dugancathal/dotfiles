@@ -10,7 +10,7 @@ else
 fi
 
 mkdir -p $HOME/.config/mise
-cp mise.toml $HOME/.config/mise/config.toml
+cp config/mise/config.toml $HOME/.config/mise/config.toml
 
 if which rake >/dev/null 2>&1; then
   echo 'rake already installed'
