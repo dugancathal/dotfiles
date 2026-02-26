@@ -21,4 +21,4 @@ else
 fi
 
 
-mise exec ruby@latest -- rake install:all
+mise exec ruby@latest -- rake install:dotfiles install:neovim
