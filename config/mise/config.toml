@@ -1,3 +1,9 @@
 # ===dotfiles===
+[settings]
+
+[settings.ruby]
+compile = false
+
 [tools]
 ruby = "latest"
+fnox = "latest"
