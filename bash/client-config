@@ -1,6 +1,5 @@
 # shellcheck shell=bash
 # ===dotfiles===
-# Client-specific configuration.
 #
 # This file is public. Put secrets in ~/.shell/client-secrets (gitignored):
 [[ -f "$HOME/.shell/client-config" ]] && . "$HOME/.shell/client-config"

@@ -1,26 +1,23 @@
 # ===dotfiles===
-# Lines configured by zsh-newuser-install
 export ZSH_THEME=robbyrussell
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
+export OHMYZSH_PATH="$HOME/.oh-my-zsh/oh-my-zsh.sh"
+[[ -f "$OHMYZSH_PATH" ]] && source $OHMYZSH_PATH
 
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=10000
+SAVEHIST=10000
+setopt SHARE_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
 bindkey -e
-# End of lines configured by zsh-newuser-install
-# The following lines were added by compinstall
-zstyle :compinstall filename '/home/tjtjrb/.zshrc'
 
+zstyle :compinstall filename "$HOME/.zshrc"
 autoload -Uz compinit
 compinit
-# End of lines added by compinstall
 
-export ZSH_THEME=robbyrussell
-source $HOME/.oh-my-zsh/oh-my-zsh.sh
-
-export PATH=$PATH:$HOME/.local/bin:$TMUXIFIER_BIN:$PYTHON3_BIN:/opt/nvim-linux-x86_64/bin
-
-# Load aliases
+# Load shared POSIX aliases/functions, then zsh-specific
+[[ -f "$HOME/.shell/env" ]] && source "$HOME/.shell/env"
+[[ -f "$HOME/.shell/aliases" ]] && source "$HOME/.shell/aliases"
 [[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
 [[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
 

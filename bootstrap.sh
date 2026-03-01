@@ -9,8 +9,8 @@ else
   export PATH="$PATH:$HOME/.local/bin"
 fi
 
-mkdir -p $HOME/.config/mise
-cp config/mise/config.toml $HOME/.config/mise/config.toml
+mkdir -p "${HOME/.config/mise}"
+cp config/mise/config.toml "${HOME}/.config/mise/config.toml"
 
 if which rake >/dev/null 2>&1; then
   echo 'rake already installed'

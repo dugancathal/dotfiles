@@ -1,0 +1,46 @@
+# shellcheck shell=bash
+# ===dotfiles===
+# Keep this file POSIX sh compatible (no bashisms, no zsh-specific syntax).
+
+# Editing
+alias v='nvim'
+alias vim='nvim'
+
+# Ruby
+alias bx='bundle exec'
+alias bxr='bundle exec rake'
+
+# Git
+alias g='git'
+
+# Workflow
+function gtw() {
+  cd "$CURRENT_PROJECT_DIR" || return
+}
+
+# Handy
+function uuid() {
+  local val
+  val="$(uuidgen | tr '[:upper:]' '[:lower:]')"
+  printf '%s\n' "$val"
+  if command -v pbcopy >/dev/null 2>&1; then
+    printf '%s' "$val" | pbcopy
+  elif command -v xclip >/dev/null 2>&1; then
+    printf '%s' "$val" | xclip -selection clipboard
+  fi
+}
+
+function genpass() {
+  local dict_file="${1:-/usr/share/dict/words}"
+  local length="${2:-4}"
+  python3 -c "import random; words=open('${dict_file}').read().splitlines(); print('-'.join(random.sample(words, ${length})).lower())"
+}
+
+# ntfy.sh notifications (set NTFY_KEY and NTFY_BASE_URL in client-config)
+function ntfy() {
+  local topic="${1:-test}"
+  local msg="${2}"
+  curl -L -H "Authorization: Bearer ${NTFY_KEY}" \
+    "${NTFY_BASE_URL}/${topic}" \
+    -d "${msg}" "${@}"
+}

@@ -9,6 +9,13 @@ OS_NAME = Dotfiles.os_name
 directory BIN_DIR
 directory HOMEDIR.join(".tmp")
 
+desc "Run unit tests"
+task :test do
+  sh "ruby setup_lib/dotfiles_test.rb"
+end
+
+task default: :test
+
 namespace :install do
   desc 'Install everything'
   task :all => %I[
@@ -90,9 +97,9 @@ namespace :install do
     desc "Install neovim on linux"
     task :neovim do
       sh <<~SH
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tgz
         sudo rm -rf /opt/nvim-linux-x86_64
-        sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+        sudo tar -C /opt -xzf /tmp/nvim.tgz
       SH
     end
 

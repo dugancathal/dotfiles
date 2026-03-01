@@ -8,11 +8,6 @@
 [core]
 	excludesfile = ~/.gitignore
 	editor = nvim
-
-# DO NOT EDIT BELOW THIS LINE
-
-[push]
-  default = tracking
 [color]
   branch = auto
   diff = auto

@@ -26,7 +26,7 @@ module ClassConf
 end
 
 module Dotfiles
-  IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE setup_lib .git bootstrap.sh]
+  IGNORED_FILES = %w[Rakefile Gemfile Gemfile.lock README.md LICENSE setup_lib .git bootstrap.sh .github]
 
   extend ClassConf
 

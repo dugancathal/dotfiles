@@ -1,57 +1,11 @@
 # ===dotfiles===
-# Editing
+# Zsh-specific aliases and functions.
+# Shared aliases/functions live in ~/.shell/aliases (sourced before this file).
+
 function vimf() {
   if [[ "$#" -eq 0 ]]; then
     nvim "$(fzf)"
   else
     nvim "$(fzf -1 -q "$1")"
   fi
-}
-
-alias v=nvim
-alias vim='nvim'
-
-# Ruby
-alias bx='bundle exec'
-alias bxr='bundle exec rake'
-
-# Git
-alias g='git'
-
-# Handy
-alias uuid="uuidgen | tee /dev/tty | pbcopy"
-function genpass() {
-  local dict_file="~/.local/share/dict/words"
-  local length="${1:-4}"
-  password="$(python3 -c "import random; print('-'.join(random.sample(open('/usr/share/dict/words').read().splitlines(), 4)).lower())")"
-  echo "${password}" # chop dangling -
-}
-
-# Workflow
-export CURRENT_PROJECT_DIR="$HOME/workspace/github.com/dugancathal/dotfiles"
-function gtw() {
-  cd $CURRENT_PROJECT_DIR
-}
-
-# Github Codespaces
-function current-codespace() {
-  gh cs list --json name | jq -r '.[].name'
-}
-
-function codespace-named() {
-  if [[ -z "$1" ]]; then
-    echo "Need a name." >&2
-    echo "USAGE: codespace-named NAME" >&2
-    return
-  fi
-
-  gh cs list --json displayName,name | jq -r "map(select(.displayName | contains(\"${1}\")))[0] | .name"
-}
-
-function ntfy() {
-  local topic="${1:-test}"
-  local msg="${2}"
-  curl -L -H "Authorization: Bearer ${NTFY_KEY}" \
-    "${NTFY_BASE_URL}/${topic}" \
-    -d "${msg}" "${@:3}"
 }

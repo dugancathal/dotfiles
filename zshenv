@@ -1,13 +1,11 @@
 # ===dotfiles===
-# Always sourced first by zsh, use this for setting vars, not calling functions
-
-[[ -f "$HOME/.zsh/aliases" ]] && source "$HOME/.zsh/aliases"
-[[ -f "$HOME/.zsh/client-config" ]] && source "$HOME/.zsh/client-config"
+# Sourced for ALL zsh invocations (scripts, non-interactive shells, etc.)
+# Only set environment variables here - no aliases, functions, or interactive config.
 
 export EDITOR=vim
 export TMUXIFIER_BIN="${HOME}/.tmuxifier/bin"
 
-if which python >/dev/null 2>&1; then
+if which python3 >/dev/null 2>&1; then
   export PYTHON3_BIN="$(python3 -m site --user-base)/bin"
 fi
 

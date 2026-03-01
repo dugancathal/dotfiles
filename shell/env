@@ -1,0 +1,11 @@
+# shellcheck shell=bash
+# ===dotfiles===
+# POSIX-compatible environment variables - sourced by both bash and zsh.
+# Keep this file POSIX sh compatible (no bashisms, no zsh-specific syntax).
+
+export EDITOR=vim
+export TMUXIFIER_BIN="${HOME}/.tmuxifier/bin"
+export NVIM_LINUX_BIN="/opt/nvim-linux-x86_64/bin"
+
+export PATH=$HOME/.local/bin:$TMUXIFIER_BIN:$NVIM_LINUX_BIN:$PATH
+export CURRENT_PROJECT_DIR=$HOME/workspace/github.com/dugancathal

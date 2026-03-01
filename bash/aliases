@@ -1,0 +1,3 @@
+# ===dotfiles===
+# Bash-specific aliases and functions.
+# Shared aliases/functions live in ~/.shell/aliases (sourced before this file).
