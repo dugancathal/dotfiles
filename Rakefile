@@ -70,6 +70,11 @@ namespace :install do
     Dotfiles.merge_install
   end
 
+  desc "install all dotfiles into the user's home directory, overwritting existing as necessary"
+  task :direct_install do
+    Dotfiles.direct_install
+  end
+
   desc "Install dotfiles"
   task :dotfiles => [:merge_install]
 

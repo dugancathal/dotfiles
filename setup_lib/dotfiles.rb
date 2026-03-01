@@ -16,7 +16,7 @@ module ClassConf
     end
 
     define_singleton_method("with_#{name}") do |other, &block|
-      original = instance_variable_get(ivar_name)
+      original = send(name)
       instance_variable_set(ivar_name, other)
       block.call(other)
     ensure
@@ -43,6 +43,10 @@ module Dotfiles
 
   def self.merge_install
     MergeInstallation.new.call(to: dest, from: source)
+  end
+
+  def self.direct_install
+    DirectInstallation.new.call(to: dest, from: source)
   end
 
   def self.link_files
@@ -97,6 +101,26 @@ module Dotfiles
       return if to.read.include?("===dotfiles===\n")
       to.open("a") do |f|
         f.write(from.read)
+      end
+    end
+  end
+
+  class DirectInstallation
+    def call(to:, from:, ignore: IGNORED_FILES, dest_file_prefix: ".")
+      from.children.each do |source_file|
+        next if ignore.include?(source_file.basename.to_s)
+
+        dest_file = to.join("#{dest_file_prefix}#{source_file.basename}")
+        next call(to: dest_file, from: source_file, ignore:, dest_file_prefix: "") if dest_file.directory?
+
+        if dest_file.exist? && !dest_file.symlink?
+          FileUtils.cp(dest_file, "#{dest_file}.bak")
+          dest_file.delete
+        elsif dest_file.symlink?
+          dest_file.delete
+        end
+
+        FileUtils.ln_s(source_file, dest_file)
       end
     end
   end
