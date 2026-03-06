@@ -1,8 +1,12 @@
 # ===dotfiles===
 
-require "shellwords"
-require "json"
-require "csv"
+begin
+  require "shellwords"
+  require "json"
+  require "csv"
+rescue LoadError
+  # noop
+end
 
 def me = "dugancathal@gmail.com"
 
