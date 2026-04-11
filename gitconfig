@@ -25,6 +25,7 @@
   re = rebase
   recon = rebase --continue
   reab = rebase --abort
+  pr = pull --rebase
   pbr = push -u origin HEAD
   pbrfl = push -u origin HEAD --force-with-lease --force-if-includes
   create-branch = !sh -c 'git fetch origin && git branch --track $1 origin/$1 && cd . && git checkout $1' -
