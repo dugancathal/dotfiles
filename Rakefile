@@ -31,9 +31,11 @@ namespace :install do
     install:jira
     install:gh
     install:glow
+    install:ripgrep
+    install:git-delta
   ]
 
-  %i[zsh mise direnv neovim fzf jira gh glow].each do |os_specific_task_name|
+  %i[zsh mise direnv neovim fzf jira gh glow ripgrep git-delta].each do |os_specific_task_name|
     desc "Install #{os_specific_task_name}"
     task os_specific_task_name => [:"install:#{OS_NAME}:#{os_specific_task_name}"]
   end
