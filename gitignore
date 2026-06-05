@@ -1,7 +1,9 @@
 # ===dotfiles===
 .envrc
+.env
 .idea/
 mise.toml
+fnox.toml
 
 .git-coauthors
 .claude
