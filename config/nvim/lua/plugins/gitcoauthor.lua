@@ -1,31 +1,20 @@
 -- ===dotfiles===
 -- Find .git-coauthors file upward from current buffer directory
-local function find_coauthor_file()
-  local dir = vim.fn.expand("%:p:h")
-  local found = vim.fn.findfile(".git-coauthors", dir .. ";")
-  return found ~= "" and found or nil
-end
+local team = require('lib.team')
+local people = team.get_pairs()
+if #people == 0 then return end
 
--- Pick local or fallback global file
-local list_path = find_coauthor_file()
-if not list_path then
-  list_path = vim.fn.expand("~/.config/git/coauthors.txt")
-end
-
--- Load authors into a table
-local authors = {}
-do
-  local f = io.open(list_path, "r")
-  if f then
-    for line in f:lines() do
-      line = vim.trim(line)
-      if line ~= "" then
-        table.insert(authors, line)
-      end
-    end
-    f:close()
+local function format_pairs(people)
+  local authors = {}
+  for _, person in ipairs(people) do
+    local line = string.format("%s <%s>", person.name, person.email)
+    table.insert(authors, line)
   end
+
+  return authors
 end
+
+local authors = format_pairs(people)
 
 -- Multi-select helper: toggle with <CR>, finish with <Esc>
 local function pick_coauthors(cb)

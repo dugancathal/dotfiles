@@ -1,0 +1,69 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'faraday'
+require 'faraday/follow_redirects'
+require 'json'
+require 'tempfile'
+
+NOTE_URL = ENV.fetch('NOTE_URL')
+NOTE_KEY = ENV.fetch('NOTE_KEY')
+NOTE_LIST_ID = ENV.fetch('NOTE_LIST_ID')
+
+is_task = ARGV.delete('--task')
+is_task ||= ARGV.delete('-t')
+
+text = ARGV.join(' ').strip
+
+def capture_from_editor(initial_content = "")
+  editor = Array(ENV.fetch('VISUAL', ENV.fetch('EDITOR', 'vi')))
+  editor += ['-c', 'set ft=jrnl'] if editor[0] == 'nvim'
+
+  Tempfile.create(['editor_input', '.txt']) do |file|
+    if !initial_content.empty?
+      file.write(initial_content)
+      file.flush
+    end
+
+    success = system(*editor, file.path)
+
+    if success
+      return File.read(file.path)
+    else
+      raise "Editor '#{editor}' failed to open or exited with an error"
+    end
+  end
+end
+
+
+payload = {
+  secret: NOTE_KEY,
+  type: is_task ? 'task' : 'jrnl',
+  list_id: NOTE_LIST_ID,
+  text: text.empty? ? capture_from_editor : text
+}
+
+if payload[:text].empty?
+  puts "🌝 Empty content - nothing pushed"
+  exit 1
+end
+
+begin
+  client = Faraday.new do |faraday|
+    faraday.response :follow_redirects
+    faraday.adapter Faraday.default_adapter
+  end
+
+  response = client.post(NOTE_URL) do |req|
+    req.headers['Content-Type'] = 'application/json'
+    req.body = payload.to_json
+  end
+
+  if JSON.parse(response.body)['error']
+    puts "❌ Failed. #{response.body}"
+  else
+    puts "✅ Pushed #{payload[:type]}."
+  end
+rescue Faraday::Error => e
+  puts "❌ Connection failed: #{e.message}"
+end
