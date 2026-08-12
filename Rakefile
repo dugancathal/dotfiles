@@ -28,7 +28,6 @@ namespace :install do
     install:direnv
     install:neovim
     install:fzf
-    install:jira
     install:gh
     install:glow
   ]
@@ -136,19 +135,6 @@ namespace :install do
         echo "deb [signed-by=/etc/apt/keyrings/charm.gpg] https://repo.charm.sh/apt/ * *" | sudo tee /etc/apt/sources.list.d/charm.list
         sudo apt update && sudo apt install glow
       BASH
-    end
-
-    desc "Install jira CLI"
-    task :jira do
-      require 'json'
-      releases = JSON.parse(`curl -sL -H 'accept: application/json' https://api.github.com/repos/ankitpokhrel/jira-cli/releases/latest | jq '.assets[] | select(.name | contains("linux"))'
-`)
-      arch = `uname -m`
-      asset = releases["assets"].find { _1["name"] =~ /linux/ && _1 =~ /#{arch}/ }
-      sh "curl -sL #{asset["browser_download_url"]} > /tmp/jira.tgz"
-
-      # We assume the binary is in <something>/bin/jira
-      sh "tar xzf /tmp/jira.tgz --wildcards '*/bin/jira' --strip-components=2"
     end
 
     desc "Install linux packages with apt"
