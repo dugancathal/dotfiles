@@ -30,10 +30,11 @@ namespace :install do
     install:jq
     install:fzf
     install:gh
+    install:rg
     install:glow
   ]
 
-  %i[zsh mise direnv neovim fzf jira gh glow jq].each do |os_specific_task_name|
+  %i[zsh mise direnv neovim fzf jira gh glow jq rg].each do |os_specific_task_name|
     desc "Install #{os_specific_task_name}"
     task os_specific_task_name => [:"install:#{OS_NAME}:#{os_specific_task_name}"]
   end
