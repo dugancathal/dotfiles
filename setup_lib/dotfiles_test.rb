@@ -75,6 +75,28 @@ class TestDotfilesOsName < Minitest::Test
   end
 end
 
+class TestDotfilesArchName < Minitest::Test
+  def test_arch_name_x86_64
+    assert_equal "x86_64", Dotfiles.arch_name("x86_64")
+  end
+
+  def test_arch_name_amd64
+    assert_equal "x86_64", Dotfiles.arch_name("amd64")
+  end
+
+  def test_arch_name_aarch64
+    assert_equal "arm64", Dotfiles.arch_name("aarch64")
+  end
+
+  def test_arch_name_arm64
+    assert_equal "arm64", Dotfiles.arch_name("arm64")
+  end
+
+  def test_arch_name_unsupported_raises
+    assert_raises(RuntimeError) { Dotfiles.arch_name("mips") }
+  end
+end
+
 module WithTempProject
   module_function
   def children_of(dir) = dir.children.map(&:basename).map(&:to_s)

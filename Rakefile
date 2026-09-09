@@ -103,9 +103,10 @@ namespace :install do
     desc "Install neovim on linux"
     task :neovim do
       sh <<~SH
-        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz -o /tmp/nvim.tgz
-        sudo rm -rf /opt/nvim-linux-x86_64
-        sudo tar -C /opt -xzf /tmp/nvim.tgz
+        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim-linux-#{Dotfiles.arch_name}.tar.gz -o /tmp/nvim.tgz
+        sudo rm -rf /opt/nvim
+        sudo mkdir -p /opt/nvim
+        sudo tar -C /opt/nvim -xzf /tmp/nvim.tgz --strip-components=1
       SH
     end
 
