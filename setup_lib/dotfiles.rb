@@ -41,6 +41,14 @@ module Dotfiles
     end
   end
 
+  def self.arch_name(host_cpu = RbConfig::CONFIG['host_cpu'])
+    case host_cpu
+      when /x86_64|amd64/ then 'x86_64'
+      when /aarch64|arm64/ then 'arm64'
+      else raise "Architecture not supported: #{host_cpu}"
+    end
+  end
+
   def self.merge_install
     MergeInstallation.new.call(to: dest, from: source)
   end

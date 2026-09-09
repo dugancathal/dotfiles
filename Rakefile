@@ -102,14 +102,8 @@ namespace :install do
 
     desc "Install neovim on linux"
     task :neovim do
-      arch = case `uname -m`.strip
-             when "x86_64" then "x86_64"
-             when "aarch64", "arm64" then "arm64"
-             else raise "Unsupported architecture: #{`uname -m`.strip}"
-             end
-
       sh <<~SH
-        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim-linux-#{arch}.tar.gz -o /tmp/nvim.tgz
+        curl -L https://github.com/neovim/neovim/releases/latest/download/nvim-linux-#{Dotfiles.arch_name}.tar.gz -o /tmp/nvim.tgz
         sudo rm -rf /opt/nvim
         sudo mkdir -p /opt/nvim
         sudo tar -C /opt/nvim -xzf /tmp/nvim.tgz --strip-components=1
